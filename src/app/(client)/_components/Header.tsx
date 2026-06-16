@@ -5,5 +5,11 @@ import { HeaderClient } from "./HeaderClient";
 export const Header = async () => {
   const viewer = await getCurrentViewer();
 
-  return <HeaderClient isAdmin={viewer.isAdmin} />;
+  return (
+    <HeaderClient
+      isAdmin={viewer.isAdmin}
+      isSignedIn={viewer.isSignedIn}
+      displayName={viewer.displayName}
+    />
+  );
 };

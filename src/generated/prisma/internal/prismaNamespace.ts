@@ -894,8 +894,8 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const UserScalarFieldEnum = {
   id: 'id',
-  clerkId: 'clerkId',
   email: 'email',
+  passwordHash: 'passwordHash',
   name: 'name',
   phone: 'phone',
   role: 'role',
@@ -983,7 +983,6 @@ export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof 
 export const DriverApplicationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  clerkId: 'clerkId',
   lastName: 'lastName',
   firstName: 'firstName',
   phone: 'phone',

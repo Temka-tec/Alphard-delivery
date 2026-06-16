@@ -4,6 +4,19 @@ import { useState } from "react";
 import type { ChangeEvent } from "react";
 
 import {
+  Armchair,
+  Camera,
+  Car,
+  CheckCircle2,
+  CreditCard,
+  FileText,
+  Image,
+  Info,
+  Send,
+  User,
+} from "lucide-react";
+
+import {
   carPhotoSlots,
   documentPhotoSlots,
   personalFields,
@@ -116,8 +129,8 @@ export const PersonalInfoStep = ({
       <DemoButton label="Demo мэдээлэл оруулах" onClick={onApplyDemo} />
 
       <div className={`${sectionTitleClasses} md:col-span-2`}>
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.1)] text-sm">
-          👤
+        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.1)] text-[var(--color-gold)]">
+          <User size={14} />
         </div>
         <div className="font-display text-sm font-bold text-[var(--color-gold)]">
           Хувийн мэдээлэл
@@ -251,8 +264,8 @@ export const PersonalInfoStep = ({
       </div>
 
       <div className={`${sectionTitleClasses} mt-4 md:col-span-2`}>
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.1)] text-sm">
-          📸
+        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.1)] text-(--color-gold)">
+          <Camera size={14} />
         </div>
         <div className="font-display text-sm font-bold text-[var(--color-gold)]">
           Профайл зураг
@@ -264,8 +277,8 @@ export const PersonalInfoStep = ({
           htmlFor="profilePhoto"
           className="block cursor-pointer rounded-[16px] border border-dashed border-[rgba(201,168,76,0.25)] bg-[var(--color-panel)] px-6 py-10 text-center transition hover:border-[rgba(201,168,76,0.5)] hover:bg-[#22222E]"
         >
-          <div className="text-3xl">
-            {uploadFiles.profilePhoto ? "✅" : "🖼️"}
+          <div className="flex justify-center text-(--color-gold)">
+            {uploadFiles.profilePhoto ? <CheckCircle2 size={32} /> : <Image size={32} />}
           </div>
           <div className="mt-3 text-sm font-medium">
             {uploadFiles.profilePhoto
@@ -291,7 +304,7 @@ export const PersonalInfoStep = ({
       </div>
 
       <div className="flex gap-3 rounded-[16px] border border-[rgba(201,168,76,0.15)] bg-[rgba(201,168,76,0.05)] p-4 text-sm md:col-span-2">
-        <span>ℹ️</span>
+        <Info size={16} className="mt-0.5 shrink-0 text-(--color-gold)" />
         <p className="leading-6 text-[var(--color-muted)]">
           <strong className="font-medium text-[var(--color-text)]">
             Анхааруулга:
@@ -316,8 +329,8 @@ export const DocumentInfoStep = ({
       <DemoButton label="Demo баримт оруулах" onClick={onApplyDemo} />
 
       <div className={`${sectionTitleClasses} md:col-span-2`}>
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.1)] text-sm">
-          🪪
+        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.1)] text-(--color-gold)">
+          <CreditCard size={14} />
         </div>
         <div className="font-display text-sm font-bold text-[var(--color-gold)]">
           Жолооны үнэмлэх
@@ -404,8 +417,8 @@ export const DocumentInfoStep = ({
       </label>
 
       <div className={`${sectionTitleClasses} mt-4 md:col-span-2`}>
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.1)] text-sm">
-          📄
+        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.1)] text-(--color-gold)">
+          <FileText size={14} />
         </div>
         <div className="font-display text-sm font-bold text-[var(--color-gold)]">
           Үнэмлэхийн зураг
@@ -419,8 +432,8 @@ export const DocumentInfoStep = ({
             key={slot.title}
             className="cursor-pointer rounded-[16px] border border-dashed border-[rgba(201,168,76,0.2)] bg-[var(--color-panel)] px-4 py-8 text-center transition hover:border-[rgba(201,168,76,0.45)] hover:bg-[#22222E]"
           >
-            <div className="text-3xl">
-              {uploadFiles[slot.id] ? "✅" : slot.icon}
+            <div className="flex justify-center text-(--color-gold)">
+              {uploadFiles[slot.id] ? <CheckCircle2 size={28} /> : slot.icon}
             </div>
             <div className="mt-2 text-sm font-medium">{slot.title}</div>
             <div className="mt-1 text-[11px] text-[var(--color-muted)]">
@@ -440,7 +453,7 @@ export const DocumentInfoStep = ({
       </div>
 
       <div className="flex gap-3 rounded-[16px] border border-[rgba(201,168,76,0.15)] bg-[rgba(201,168,76,0.05)] p-4 text-sm md:col-span-2">
-        <span>✅</span>
+        <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-(--color-gold)" />
         <p className="leading-6 text-[var(--color-muted)]">
           <strong className="font-medium text-[var(--color-text)]">
             Шаардлага:
@@ -465,8 +478,8 @@ export const CarInfoStep = ({
       <DemoButton label="Demo машины мэдээлэл оруулах" onClick={onApplyDemo} />
 
       <div className={`${sectionTitleClasses} md:col-span-2`}>
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.1)] text-sm">
-          🚙
+        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.1)] text-(--color-gold)">
+          <Car size={14} />
         </div>
         <div className="font-display text-sm font-bold text-[var(--color-gold)]">
           Машины мэдээлэл
@@ -603,8 +616,8 @@ export const CarInfoStep = ({
       </label>
 
       <div className={`${sectionTitleClasses} mt-4 md:col-span-2`}>
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.1)] text-sm">
-          📷
+        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.1)] text-(--color-gold)">
+          <Camera size={14} />
         </div>
         <div className="font-display text-sm font-bold text-[var(--color-gold)]">
           Машины зургууд
@@ -618,8 +631,8 @@ export const CarInfoStep = ({
             key={slot.title}
             className="cursor-pointer rounded-[16px] border border-dashed border-[rgba(201,168,76,0.2)] bg-[var(--color-panel)] px-4 py-8 text-center transition hover:border-[rgba(201,168,76,0.45)] hover:bg-[#22222E]"
           >
-            <div className="text-3xl">
-              {uploadFiles[slot.id] ? "✅" : slot.icon}
+            <div className="flex justify-center text-(--color-gold)">
+              {uploadFiles[slot.id] ? <CheckCircle2 size={28} /> : slot.icon}
             </div>
             <div className="mt-2 text-sm font-medium">{slot.title}</div>
             <div className="mt-1 text-[11px] text-[var(--color-muted)]">
@@ -652,7 +665,7 @@ export const CarInfoStep = ({
       </label>
 
       <div className="flex gap-3 rounded-[16px] border border-[rgba(201,168,76,0.15)] bg-[rgba(201,168,76,0.05)] p-4 text-sm md:col-span-2">
-        <span>📨</span>
+        <Send size={16} className="mt-0.5 shrink-0 text-(--color-gold)" />
         <p className="leading-6 text-[var(--color-muted)]">
           <strong className="font-medium text-[var(--color-text)]">
             Хүсэлт илгээсний дараа:

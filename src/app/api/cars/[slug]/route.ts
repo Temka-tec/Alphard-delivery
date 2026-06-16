@@ -3,7 +3,7 @@ import { getCarDetailsBySlug } from "@/lib/car-data";
 
 export async function GET(
   _req: Request,
-  context: RouteContext<"/api/cars/[slug]">,
+  context: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await context.params;
   const car = await getCarDetailsBySlug(slug);

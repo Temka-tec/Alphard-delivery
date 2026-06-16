@@ -39,7 +39,6 @@ export type DriverApplicationSumAggregateOutputType = {
 export type DriverApplicationMinAggregateOutputType = {
   id: string | null
   userId: string | null
-  clerkId: string | null
   lastName: string | null
   firstName: string | null
   phone: string | null
@@ -77,7 +76,6 @@ export type DriverApplicationMinAggregateOutputType = {
 export type DriverApplicationMaxAggregateOutputType = {
   id: string | null
   userId: string | null
-  clerkId: string | null
   lastName: string | null
   firstName: string | null
   phone: string | null
@@ -115,7 +113,6 @@ export type DriverApplicationMaxAggregateOutputType = {
 export type DriverApplicationCountAggregateOutputType = {
   id: number
   userId: number
-  clerkId: number
   lastName: number
   firstName: number
   phone: number
@@ -165,7 +162,6 @@ export type DriverApplicationSumAggregateInputType = {
 export type DriverApplicationMinAggregateInputType = {
   id?: true
   userId?: true
-  clerkId?: true
   lastName?: true
   firstName?: true
   phone?: true
@@ -203,7 +199,6 @@ export type DriverApplicationMinAggregateInputType = {
 export type DriverApplicationMaxAggregateInputType = {
   id?: true
   userId?: true
-  clerkId?: true
   lastName?: true
   firstName?: true
   phone?: true
@@ -241,7 +236,6 @@ export type DriverApplicationMaxAggregateInputType = {
 export type DriverApplicationCountAggregateInputType = {
   id?: true
   userId?: true
-  clerkId?: true
   lastName?: true
   firstName?: true
   phone?: true
@@ -366,7 +360,6 @@ export type DriverApplicationGroupByArgs<ExtArgs extends runtime.Types.Extension
 export type DriverApplicationGroupByOutputType = {
   id: string
   userId: string | null
-  clerkId: string
   lastName: string
   firstName: string
   phone: string
@@ -427,7 +420,6 @@ export type DriverApplicationWhereInput = {
   NOT?: Prisma.DriverApplicationWhereInput | Prisma.DriverApplicationWhereInput[]
   id?: Prisma.StringFilter<"DriverApplication"> | string
   userId?: Prisma.StringNullableFilter<"DriverApplication"> | string | null
-  clerkId?: Prisma.StringFilter<"DriverApplication"> | string
   lastName?: Prisma.StringFilter<"DriverApplication"> | string
   firstName?: Prisma.StringFilter<"DriverApplication"> | string
   phone?: Prisma.StringFilter<"DriverApplication"> | string
@@ -466,7 +458,6 @@ export type DriverApplicationWhereInput = {
 export type DriverApplicationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
-  clerkId?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -508,7 +499,6 @@ export type DriverApplicationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.DriverApplicationWhereInput[]
   NOT?: Prisma.DriverApplicationWhereInput | Prisma.DriverApplicationWhereInput[]
   userId?: Prisma.StringNullableFilter<"DriverApplication"> | string | null
-  clerkId?: Prisma.StringFilter<"DriverApplication"> | string
   lastName?: Prisma.StringFilter<"DriverApplication"> | string
   firstName?: Prisma.StringFilter<"DriverApplication"> | string
   phone?: Prisma.StringFilter<"DriverApplication"> | string
@@ -547,7 +537,6 @@ export type DriverApplicationWhereUniqueInput = Prisma.AtLeast<{
 export type DriverApplicationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
-  clerkId?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -593,7 +582,6 @@ export type DriverApplicationScalarWhereWithAggregatesInput = {
   NOT?: Prisma.DriverApplicationScalarWhereWithAggregatesInput | Prisma.DriverApplicationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"DriverApplication"> | string
   userId?: Prisma.StringNullableWithAggregatesFilter<"DriverApplication"> | string | null
-  clerkId?: Prisma.StringWithAggregatesFilter<"DriverApplication"> | string
   lastName?: Prisma.StringWithAggregatesFilter<"DriverApplication"> | string
   firstName?: Prisma.StringWithAggregatesFilter<"DriverApplication"> | string
   phone?: Prisma.StringWithAggregatesFilter<"DriverApplication"> | string
@@ -630,7 +618,6 @@ export type DriverApplicationScalarWhereWithAggregatesInput = {
 
 export type DriverApplicationCreateInput = {
   id?: string
-  clerkId: string
   lastName: string
   firstName: string
   phone: string
@@ -669,7 +656,6 @@ export type DriverApplicationCreateInput = {
 export type DriverApplicationUncheckedCreateInput = {
   id?: string
   userId?: string | null
-  clerkId: string
   lastName: string
   firstName: string
   phone: string
@@ -706,7 +692,6 @@ export type DriverApplicationUncheckedCreateInput = {
 
 export type DriverApplicationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -745,7 +730,6 @@ export type DriverApplicationUpdateInput = {
 export type DriverApplicationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -783,7 +767,6 @@ export type DriverApplicationUncheckedUpdateInput = {
 export type DriverApplicationCreateManyInput = {
   id?: string
   userId?: string | null
-  clerkId: string
   lastName: string
   firstName: string
   phone: string
@@ -820,7 +803,6 @@ export type DriverApplicationCreateManyInput = {
 
 export type DriverApplicationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -858,7 +840,6 @@ export type DriverApplicationUpdateManyMutationInput = {
 export type DriverApplicationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -906,7 +887,6 @@ export type DriverApplicationOrderByRelationAggregateInput = {
 export type DriverApplicationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  clerkId?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -949,7 +929,6 @@ export type DriverApplicationAvgOrderByAggregateInput = {
 export type DriverApplicationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  clerkId?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -987,7 +966,6 @@ export type DriverApplicationMaxOrderByAggregateInput = {
 export type DriverApplicationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  clerkId?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -1075,7 +1053,6 @@ export type EnumDriverApplicationStatusFieldUpdateOperationsInput = {
 
 export type DriverApplicationCreateWithoutUserInput = {
   id?: string
-  clerkId: string
   lastName: string
   firstName: string
   phone: string
@@ -1112,7 +1089,6 @@ export type DriverApplicationCreateWithoutUserInput = {
 
 export type DriverApplicationUncheckedCreateWithoutUserInput = {
   id?: string
-  clerkId: string
   lastName: string
   firstName: string
   phone: string
@@ -1179,7 +1155,6 @@ export type DriverApplicationScalarWhereInput = {
   NOT?: Prisma.DriverApplicationScalarWhereInput | Prisma.DriverApplicationScalarWhereInput[]
   id?: Prisma.StringFilter<"DriverApplication"> | string
   userId?: Prisma.StringNullableFilter<"DriverApplication"> | string | null
-  clerkId?: Prisma.StringFilter<"DriverApplication"> | string
   lastName?: Prisma.StringFilter<"DriverApplication"> | string
   firstName?: Prisma.StringFilter<"DriverApplication"> | string
   phone?: Prisma.StringFilter<"DriverApplication"> | string
@@ -1216,7 +1191,6 @@ export type DriverApplicationScalarWhereInput = {
 
 export type DriverApplicationCreateManyUserInput = {
   id?: string
-  clerkId: string
   lastName: string
   firstName: string
   phone: string
@@ -1253,7 +1227,6 @@ export type DriverApplicationCreateManyUserInput = {
 
 export type DriverApplicationUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1290,7 +1263,6 @@ export type DriverApplicationUpdateWithoutUserInput = {
 
 export type DriverApplicationUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1327,7 +1299,6 @@ export type DriverApplicationUncheckedUpdateWithoutUserInput = {
 
 export type DriverApplicationUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1367,7 +1338,6 @@ export type DriverApplicationUncheckedUpdateManyWithoutUserInput = {
 export type DriverApplicationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  clerkId?: boolean
   lastName?: boolean
   firstName?: boolean
   phone?: boolean
@@ -1406,7 +1376,6 @@ export type DriverApplicationSelect<ExtArgs extends runtime.Types.Extensions.Int
 export type DriverApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  clerkId?: boolean
   lastName?: boolean
   firstName?: boolean
   phone?: boolean
@@ -1445,7 +1414,6 @@ export type DriverApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.T
 export type DriverApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  clerkId?: boolean
   lastName?: boolean
   firstName?: boolean
   phone?: boolean
@@ -1484,7 +1452,6 @@ export type DriverApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.T
 export type DriverApplicationSelectScalar = {
   id?: boolean
   userId?: boolean
-  clerkId?: boolean
   lastName?: boolean
   firstName?: boolean
   phone?: boolean
@@ -1519,7 +1486,7 @@ export type DriverApplicationSelectScalar = {
   createdAt?: boolean
 }
 
-export type DriverApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "clerkId" | "lastName" | "firstName" | "phone" | "email" | "registerNumber" | "birthDate" | "homeAddress" | "licenseNumber" | "licenseClass" | "licenseIssuedAt" | "licenseExpiry" | "drivingExperience" | "accidentHistory" | "carMake" | "carModel" | "carYear" | "carColor" | "plateNumber" | "seatCount" | "transmission" | "enginePower" | "dailyRate" | "carNotes" | "profilePhotoName" | "licenseFrontName" | "licenseBackName" | "licenseSelfieName" | "carFrontName" | "carBackName" | "carInteriorName" | "status" | "createdAt", ExtArgs["result"]["driverApplication"]>
+export type DriverApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "lastName" | "firstName" | "phone" | "email" | "registerNumber" | "birthDate" | "homeAddress" | "licenseNumber" | "licenseClass" | "licenseIssuedAt" | "licenseExpiry" | "drivingExperience" | "accidentHistory" | "carMake" | "carModel" | "carYear" | "carColor" | "plateNumber" | "seatCount" | "transmission" | "enginePower" | "dailyRate" | "carNotes" | "profilePhotoName" | "licenseFrontName" | "licenseBackName" | "licenseSelfieName" | "carFrontName" | "carBackName" | "carInteriorName" | "status" | "createdAt", ExtArgs["result"]["driverApplication"]>
 export type DriverApplicationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.DriverApplication$userArgs<ExtArgs>
 }
@@ -1538,7 +1505,6 @@ export type $DriverApplicationPayload<ExtArgs extends runtime.Types.Extensions.I
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string | null
-    clerkId: string
     lastName: string
     firstName: string
     phone: string
@@ -1997,7 +1963,6 @@ export interface Prisma__DriverApplicationClient<T, Null = never, ExtArgs extend
 export interface DriverApplicationFieldRefs {
   readonly id: Prisma.FieldRef<"DriverApplication", 'String'>
   readonly userId: Prisma.FieldRef<"DriverApplication", 'String'>
-  readonly clerkId: Prisma.FieldRef<"DriverApplication", 'String'>
   readonly lastName: Prisma.FieldRef<"DriverApplication", 'String'>
   readonly firstName: Prisma.FieldRef<"DriverApplication", 'String'>
   readonly phone: Prisma.FieldRef<"DriverApplication", 'String'>

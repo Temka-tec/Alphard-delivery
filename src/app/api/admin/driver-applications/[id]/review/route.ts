@@ -1,7 +1,7 @@
-import { auth } from "@clerk/nextjs/server";
 import { Role } from "@/generated/prisma/client";
 import { slugify } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/session";
 
 const approvalSchema = ["APPROVED", "REJECTED"] as const;
 type ApprovalStatus = (typeof approvalSchema)[number];
@@ -20,14 +20,14 @@ export async function PATCH(
   req: Request,
   context: { params: Promise<{ id: string }> },
 ) {
-  const { userId } = await auth();
+  const session = await getSession();
 
-  if (!userId) {
+  if (!session.userId) {
     return new Response("Нэвтрэх шаардлагатай.", { status: 401 });
   }
 
   const adminUser = await prisma.user.findUnique({
-    where: { clerkId: userId },
+    where: { id: session.userId },
   });
 
   if (adminUser?.role !== Role.ADMIN) {

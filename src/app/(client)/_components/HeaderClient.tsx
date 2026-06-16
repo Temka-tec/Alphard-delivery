@@ -1,6 +1,5 @@
 "use client";
 
-import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -10,12 +9,11 @@ import { navItems } from "./landing-data";
 
 type HeaderClientProps = {
   isAdmin: boolean;
+  isSignedIn: boolean;
+  displayName: string | null;
 };
 
-export const HeaderClient = ({ isAdmin }: HeaderClientProps) => {
-  const { isLoaded, user } = useUser();
-  const userId = user?.id;
-  const isSignedIn = isLoaded && Boolean(userId);
+export const HeaderClient = ({ isAdmin, isSignedIn, displayName }: HeaderClientProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -28,8 +26,14 @@ export const HeaderClient = ({ isAdmin }: HeaderClientProps) => {
     return pathname === href;
   };
 
+  const handleSignOut = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/");
+    router.refresh();
+  };
+
   return (
-    <header className="sticky top-0 z-30 border-b border-white/8 bg-[var(--color-header-bg)] backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-[var(--color-text)]/8 bg-[var(--color-header-bg)] backdrop-blur">
       <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 lg:px-10">
         <div className="flex items-center justify-between gap-3">
           <Link
@@ -110,13 +114,14 @@ export const HeaderClient = ({ isAdmin }: HeaderClientProps) => {
                 >
                   Захиалах
                 </button>
-                <UserButton
-                  appearance={{
-                    elements: {
-                      avatarBox: "h-10 w-10 ring-1 ring-[rgba(201,168,76,0.3)]",
-                    },
-                  }}
-                />
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(201,168,76,0.3)] bg-[rgba(201,168,76,0.1)] text-sm font-semibold text-[var(--color-gold)] ring-1 ring-[rgba(201,168,76,0.3)]"
+                  title={displayName ?? "Гарах"}
+                >
+                  {displayName?.slice(0, 1)?.toUpperCase() ?? "U"}
+                </button>
               </>
             )}
           </div>
@@ -126,7 +131,7 @@ export const HeaderClient = ({ isAdmin }: HeaderClientProps) => {
             <button
               type="button"
               onClick={() => setIsMenuOpen((c) => !c)}
-              className="rounded-lg border border-white/10 px-3 py-2 text-sm text-[var(--color-text)]"
+              className="rounded-lg border border-[var(--color-text)]/10 px-3 py-2 text-sm text-[var(--color-text)]"
               aria-label="Menu нээх"
             >
               {isMenuOpen ? "Хаах" : "Цэс"}
@@ -135,7 +140,7 @@ export const HeaderClient = ({ isAdmin }: HeaderClientProps) => {
         </div>
 
         {isMenuOpen ? (
-          <div className="fade-in-up mt-4 rounded-2xl border border-white/8 bg-[var(--color-surface)] p-4 md:hidden">
+          <div className="fade-in-up mt-4 rounded-2xl border border-[var(--color-text)]/8 bg-[var(--color-surface)] p-4 md:hidden">
             <nav className="flex flex-col gap-2">
               {navItems.map((item) => (
                 <a
@@ -194,16 +199,16 @@ export const HeaderClient = ({ isAdmin }: HeaderClientProps) => {
                   >
                     Захиалах
                   </Link>
-                  <div className="pt-2">
-                    <UserButton
-                      appearance={{
-                        elements: {
-                          avatarBox:
-                            "h-10 w-10 ring-1 ring-[rgba(201,168,76,0.3)]",
-                        },
-                      }}
-                    />
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      void handleSignOut();
+                    }}
+                    className="rounded-lg border border-[var(--color-text)]/10 px-4 py-3 text-center text-sm text-[var(--color-muted)] transition hover:bg-[var(--color-panel)]"
+                  >
+                    Гарах
+                  </button>
                 </>
               )}
             </div>

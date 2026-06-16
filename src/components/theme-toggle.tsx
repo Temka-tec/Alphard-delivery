@@ -1,5 +1,6 @@
 "use client";
 
+import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 
 export function ThemeToggle() {
@@ -10,9 +11,9 @@ export function ThemeToggle() {
       <button
         type="button"
         aria-label="Theme солих"
-        className="rounded-lg border border-white/10 px-3 py-2 text-sm text-[var(--color-muted)]"
+        className="rounded-lg border border-white/10 p-2.5 text-[var(--color-muted)] transition"
       >
-        Theme
+        <Sun className="h-5 w-5" />
       </button>
     );
   }
@@ -24,9 +25,13 @@ export function ThemeToggle() {
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label="Theme солих"
-      className="rounded-lg border border-white/10 bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text)] transition hover:border-[rgba(201,168,76,0.4)] hover:text-[var(--color-gold)]"
+      className="group rounded-lg border border-[rgba(201,168,76,0.2)] bg-[var(--color-surface)] p-2.5 text-[var(--color-text)] transition hover:border-[rgba(201,168,76,0.4)] hover:bg-[rgba(201,168,76,0.05)] hover:text-[var(--color-gold)]"
     >
-      {isDark ? "Light" : "Dark"}
+      {isDark ? (
+        <Sun className="h-5 w-5 transition-transform group-hover:rotate-12" />
+      ) : (
+        <Moon className="h-5 w-5 transition-transform group-hover:-rotate-12" />
+      )}
     </button>
   );
 }

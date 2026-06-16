@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
+import { getCurrentViewer } from "@/lib/current-viewer";
 import { getCarDetailsBySlug } from "@/lib/car-data";
 import { parseLocationSelection } from "@/lib/mongolia-locations";
 import { CarImageGallery } from "./_components/CarImageGallery";
@@ -15,7 +15,7 @@ export default async function CarDetailsPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { userId } = await auth();
+  const viewer = await getCurrentViewer();
   const { slug } = await params;
   const car = await getCarDetailsBySlug(slug);
 
@@ -23,7 +23,7 @@ export default async function CarDetailsPage({
     notFound();
   }
 
-  const isOwnCar = Boolean(userId && car.ownerClerkId && userId === car.ownerClerkId);
+  const isOwnCar = Boolean(viewer.user?.id && car.ownerId && viewer.user.id === car.ownerId);
   const locationSelection = parseLocationSelection(car.location);
 
   return (
@@ -205,7 +205,7 @@ export default async function CarDetailsPage({
             initialAimag={locationSelection.aimag}
             initialDestination={locationSelection.destination}
             isOwnCar={isOwnCar}
-            userId={userId}
+            userId={viewer.user?.id ?? null}
           />
         </div>
       </div>

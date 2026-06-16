@@ -1,35 +1,18 @@
 import "server-only";
 
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { Role } from "@/generated/prisma/client";
 import { isAdminEmail } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
-
-const buildClerkName = (clerkUser: Awaited<ReturnType<typeof currentUser>>) =>
-  clerkUser?.fullName ||
-  [clerkUser?.firstName, clerkUser?.lastName].filter(Boolean).join(" ") ||
-  null;
-
-const buildDriverApplicationName = (
-  application: {
-    firstName: string;
-    lastName: string;
-  } | null,
-) =>
-  application
-    ? [application.lastName, application.firstName].filter(Boolean).join(" ").trim() || null
-    : null;
+import { getSession } from "@/lib/session";
 
 export const getCurrentViewer = async () => {
-  const { userId } = await auth();
+  const session = await getSession();
 
-  if (!userId) {
+  if (!session.userId) {
     return {
       isSignedIn: false,
       isDriver: false,
       isAdmin: false,
       hasDriverApplication: false,
-      clerkId: null,
       user: null,
       driverProfile: null,
       latestDriverApplication: null,
@@ -38,15 +21,8 @@ export const getCurrentViewer = async () => {
     };
   }
 
-  const clerkUser = await currentUser();
-
-  const primaryEmail = clerkUser?.primaryEmailAddress?.emailAddress || null;
-  const fallbackName = buildClerkName(clerkUser);
-  const fallbackPhone = clerkUser?.phoneNumbers?.[0]?.phoneNumber || null;
-  const shouldBeAdmin = primaryEmail ? isAdminEmail(primaryEmail) : false;
-
-  let dbUser = await prisma.user.findUnique({
-    where: { clerkId: userId },
+  const dbUser = await prisma.user.findUnique({
+    where: { id: session.userId },
     include: {
       driverProfile: {
         include: {
@@ -62,91 +38,48 @@ export const getCurrentViewer = async () => {
     },
   });
 
-  if (!dbUser && primaryEmail) {
-    dbUser = await prisma.user.create({
-      data: {
-        clerkId: userId,
-        email: primaryEmail,
-        name: fallbackName,
-        phone: fallbackPhone,
-        role: shouldBeAdmin ? Role.ADMIN : Role.USER,
-      },
-      include: {
-        driverProfile: {
-          include: {
-            car: true,
-          },
-        },
-        driverApplications: {
-          orderBy: {
-            createdAt: "desc",
-          },
-          take: 1,
-        },
-      },
-    });
-  } else if (dbUser) {
-    const nextEmail = primaryEmail || dbUser.email;
-    const nextPhone = dbUser.phone || fallbackPhone;
-    const nextName = dbUser.name || fallbackName;
-    const nextRole = shouldBeAdmin ? Role.ADMIN : dbUser.role;
-    const shouldUpdate =
-      dbUser.email !== nextEmail ||
-      dbUser.phone !== nextPhone ||
-      dbUser.name !== nextName ||
-      dbUser.role !== nextRole;
-
-    if (shouldUpdate) {
-      dbUser = await prisma.user.update({
-        where: { clerkId: userId },
-        data: {
-          email: nextEmail,
-          name: nextName,
-          phone: nextPhone,
-          role: nextRole,
-        },
-        include: {
-          driverProfile: {
-            include: {
-              car: true,
-            },
-          },
-          driverApplications: {
-            orderBy: {
-              createdAt: "desc",
-            },
-            take: 1,
-          },
-        },
-      });
-    }
+  if (!dbUser) {
+    return {
+      isSignedIn: false,
+      isDriver: false,
+      isAdmin: false,
+      hasDriverApplication: false,
+      user: null,
+      driverProfile: null,
+      latestDriverApplication: null,
+      displayName: null,
+      displayEmail: null,
+    };
   }
 
-  const latestDriverApplication = dbUser?.driverApplications[0] ?? null;
+  const latestDriverApplication = dbUser.driverApplications[0] ?? null;
   const isDriver =
-    dbUser?.role === "DRIVER" || dbUser?.driverProfile?.status === "APPROVED";
+    dbUser.role === "DRIVER" || dbUser.driverProfile?.status === "APPROVED";
   const hasDriverApplication = Boolean(latestDriverApplication);
-  const driverDisplayName = buildDriverApplicationName(latestDriverApplication);
+
+  const driverDisplayName = latestDriverApplication
+    ? [latestDriverApplication.lastName, latestDriverApplication.firstName]
+        .filter(Boolean)
+        .join(" ")
+        .trim() || null
+    : null;
+
   const displayName =
     ((isDriver || hasDriverApplication) && driverDisplayName) ||
-    dbUser?.name ||
-    fallbackName ||
+    dbUser.name ||
     null;
-  const displayEmail =
-    dbUser?.email || clerkUser?.primaryEmailAddress?.emailAddress || null;
-  const isAdmin =
-    dbUser?.role === Role.ADMIN || (displayEmail ? isAdminEmail(displayEmail) : false);
+
+  const isAdmin = dbUser.role === "ADMIN" || isAdminEmail(dbUser.email);
 
   return {
     isSignedIn: true,
     isDriver,
     isAdmin,
     hasDriverApplication,
-    clerkId: userId,
     user: dbUser,
-    driverProfile: dbUser?.driverProfile ?? null,
+    driverProfile: dbUser.driverProfile ?? null,
     latestDriverApplication,
     displayName,
-    displayEmail,
+    displayEmail: dbUser.email,
   };
 };

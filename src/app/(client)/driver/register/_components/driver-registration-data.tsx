@@ -1,3 +1,12 @@
+import {
+  Armchair,
+  Camera,
+  Car,
+  ChevronLeft,
+  ClipboardList,
+  RefreshCw,
+} from "lucide-react";
+
 export const progressSteps = [
   { label: "Хэрэглэгч", status: "done" },
   { label: "Жолооч мэдээлэл", status: "active" },
@@ -52,32 +61,42 @@ export const personalFields = [
 
 export const documentPhotoSlots = [
   {
-    id: "licenseFront",
-    icon: "📋",
+    id: "licenseFront" as const,
+    icon: <ClipboardList size={28} />,
     title: "Урд тал",
     subtitle: "Тодорхой, бүтэн",
   },
   {
-    id: "licenseBack",
-    icon: "🔄",
+    id: "licenseBack" as const,
+    icon: <RefreshCw size={28} />,
     title: "Ар тал",
     subtitle: "Тодорхой, бүтэн",
   },
   {
-    id: "licenseSelfie",
-    icon: "🤳",
+    id: "licenseSelfie" as const,
+    icon: <Camera size={28} />,
     title: "Selfie + үнэмлэх",
     subtitle: "Нэгэн зэрэг",
   },
-] as const;
+];
 
 export const carPhotoSlots = [
-  { id: "carFront", icon: "🚗", title: "Урд тал", subtitle: "Гаднаас" },
-  { id: "carBack", icon: "🔙", title: "Ар тал", subtitle: "Дугаар харагдах" },
   {
-    id: "carInterior",
-    icon: "🛋️",
+    id: "carFront" as const,
+    icon: <Car size={28} />,
+    title: "Урд тал",
+    subtitle: "Гаднаас",
+  },
+  {
+    id: "carBack" as const,
+    icon: <ChevronLeft size={28} />,
+    title: "Ар тал",
+    subtitle: "Дугаар харагдах",
+  },
+  {
+    id: "carInterior" as const,
+    icon: <Armchair size={28} />,
     title: "Дотор тал",
     subtitle: "Сандал, хүрд",
   },
-] as const;
+];

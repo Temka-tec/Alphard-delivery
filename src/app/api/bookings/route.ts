@@ -1,17 +1,12 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/session";
 
 const MS_IN_DAY = 86_400_000;
 
-const buildClerkName = (user: Awaited<ReturnType<typeof currentUser>>) =>
-  user?.fullName ||
-  [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
-  null;
-
 export async function POST(req: Request) {
-  const { userId } = await auth();
+  const session = await getSession();
 
-  if (!userId) {
+  if (!session.userId) {
     return new Response("Нэвтрэх шаардлагатай.", { status: 401 });
   }
 
@@ -48,33 +43,11 @@ export async function POST(req: Request) {
     Math.round((endDate.getTime() - startDate.getTime()) / MS_IN_DAY),
   );
 
-  const clerkUser = await currentUser();
-  const primaryEmail =
-    clerkUser?.primaryEmailAddress?.emailAddress || `${userId}@clerk.local`;
-  const fallbackName = buildClerkName(clerkUser);
-  const fallbackPhone = clerkUser?.phoneNumbers?.[0]?.phoneNumber || null;
+  const dbUser = await prisma.user.findUnique({ where: { id: session.userId } });
 
-  const existingUser = await prisma.user.findUnique({
-    where: { clerkId: userId },
-  });
-
-  const dbUser = existingUser
-    ? await prisma.user.update({
-        where: { clerkId: userId },
-        data: {
-          email: primaryEmail,
-          phone: existingUser.phone || fallbackPhone,
-          name: existingUser.name || fallbackName,
-        },
-      })
-    : await prisma.user.create({
-        data: {
-          clerkId: userId,
-          email: primaryEmail,
-          phone: fallbackPhone,
-          name: fallbackName,
-        },
-      });
+  if (!dbUser) {
+    return new Response("Хэрэглэгч олдсонгүй.", { status: 401 });
+  }
 
   const car = await prisma.car.findUnique({
     where: { id: carId },
@@ -91,7 +64,7 @@ export async function POST(req: Request) {
     return new Response("Сонгосон машин олдсонгүй.", { status: 404 });
   }
 
-  if (car.driver?.user?.clerkId === userId) {
+  if (car.driver?.user?.id === session.userId) {
     return new Response("Өөрийн машиныг өөрөө захиалах боломжгүй.", {
       status: 400,
     });

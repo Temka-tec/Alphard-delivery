@@ -58,6 +58,7 @@ export const DriverCTA = async () => {
                 <DriverRegistrationDialog
                   label="Жолоочийн хүсэлт →"
                   className="rounded-lg bg-(--color-gold) px-5 py-3 text-center text-sm font-medium text-(--color-ink) transition hover:bg-(--color-gold-light)"
+                  isSignedIn={viewer.isSignedIn}
                 />
               ) : null}
               {!viewer.isSignedIn ? (

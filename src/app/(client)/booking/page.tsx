@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function BookingPage() {
   const viewer = await getCurrentViewer();
   const [cars, recentBookings] = await Promise.all([
-    getAvailableCars(undefined, viewer.clerkId),
+    getAvailableCars(undefined, viewer.user?.id ?? null),
     viewer.user
       ? prisma.booking.findMany({
           where: {

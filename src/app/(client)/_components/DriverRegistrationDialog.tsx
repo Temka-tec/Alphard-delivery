@@ -1,24 +1,22 @@
 "use client";
 
-import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type DriverRegistrationDialogProps = {
   className: string;
   label: string;
+  isSignedIn: boolean;
 };
 
 export const DriverRegistrationDialog = ({
   className,
   label,
+  isSignedIn,
 }: DriverRegistrationDialogProps) => {
-  const { isLoaded, userId } = useAuth();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const driverRedirectUrl = "/driver/register";
-
-  const isSignedIn = isLoaded && Boolean(userId);
 
   const handleTriggerClick = () => {
     if (isSignedIn) {
@@ -77,7 +75,7 @@ export const DriverRegistrationDialog = ({
                 type="button"
                 onClick={() =>
                   router.push(
-                    `/sign-up?compact=1&redirect_url=${encodeURIComponent(driverRedirectUrl)}`,
+                    `/sign-up?redirect_url=${encodeURIComponent(driverRedirectUrl)}`,
                   )
                 }
                 className="w-full rounded-xl bg-[var(--color-gold)] px-5 py-3 text-sm font-medium text-[var(--color-ink)] transition hover:bg-[var(--color-gold-light)]"
@@ -89,7 +87,7 @@ export const DriverRegistrationDialog = ({
                 type="button"
                 onClick={() =>
                   router.push(
-                    `/sign-in?compact=1&redirect_url=${encodeURIComponent(driverRedirectUrl)}`,
+                    `/sign-in?redirect_url=${encodeURIComponent(driverRedirectUrl)}`,
                   )
                 }
                 className="w-full rounded-xl border border-[rgba(201,168,76,0.3)] px-5 py-3 text-sm font-medium text-[var(--color-gold)] transition hover:bg-[rgba(201,168,76,0.08)]"

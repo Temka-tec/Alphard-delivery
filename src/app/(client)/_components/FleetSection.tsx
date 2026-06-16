@@ -1,16 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { auth } from "@clerk/nextjs/server";
+import { getCurrentViewer } from "@/lib/current-viewer";
 import { getAvailableCars } from "@/lib/car-data";
 import { FleetCardClient } from "./FleetCardClient";
 
 const iconShellClasses =
-  "flex h-36 items-center justify-center bg-[linear-gradient(135deg,#1A1A26,#22222E)]";
+  "flex h-36 items-center justify-center bg-[linear-gradient(135deg,var(--color-panel),var(--color-surface))]";
 
 export const FleetSection = async () => {
-  const { userId } = await auth();
-  const isSignedIn = Boolean(userId);
-  const cars = await getAvailableCars(6, userId);
+  const viewer = await getCurrentViewer();
+  const isSignedIn = viewer.isSignedIn;
+  const cars = await getAvailableCars(6, viewer.user?.id ?? null);
 
   return (
     <section id="cars" className="px-4 py-14 sm:px-6 lg:px-10">
@@ -31,14 +31,14 @@ export const FleetSection = async () => {
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {cars.length === 0 ? (
-            <div className="rounded-[20px] border border-white/8 bg-[var(--color-surface)] p-8 text-sm text-[var(--color-muted)] md:col-span-2 xl:col-span-3">
+            <div className="rounded-[20px] border border-[var(--color-text)]/8 bg-[var(--color-surface)] p-8 text-sm text-[var(--color-muted)] md:col-span-2 xl:col-span-3">
               Одоогоор сул машин бүртгэгдээгүй байна.
             </div>
           ) : null}
 
           {cars.map((car, index) => (
             <FleetCardClient key={car.id ?? car.slug ?? `${car.name}-${index}`}>
-              <article className="card-lift card-glow overflow-hidden rounded-[20px] border border-white/8 bg-[var(--color-surface)] hover:border-[rgba(201,168,76,0.25)]">
+              <article className="card-lift card-glow overflow-hidden rounded-[20px] border border-[var(--color-text)]/8 bg-[var(--color-surface)] hover:border-[rgba(201,168,76,0.25)]">
                 <div className={`${iconShellClasses} relative`}>
                   {car.heroImage ? (
                     <Image

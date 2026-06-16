@@ -1,13 +1,13 @@
-import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/session";
 
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const { userId } = await auth();
+  const session = await getSession();
 
-  if (!userId) {
+  if (!session.userId) {
     return new Response("Нэвтрэх шаардлагатай.", { status: 401 });
   }
 
@@ -36,7 +36,7 @@ export async function POST(
     return new Response("Захиалга олдсонгүй.", { status: 404 });
   }
 
-  if (booking.user.clerkId !== userId) {
+  if (booking.user.id !== session.userId) {
     return new Response("Энэ захиалгад сэтгэгдэл үлдээх эрхгүй байна.", {
       status: 403,
     });

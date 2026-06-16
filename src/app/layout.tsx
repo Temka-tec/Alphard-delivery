@@ -1,4 +1,3 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { ToastProvider } from "@/components/toast";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -22,12 +21,10 @@ export default function RootLayout({
       className={cn("h-full", "scroll-smooth", "antialiased", "font-sans")}
     >
       <body className="min-h-full flex flex-col">
-        <ClerkProvider>
-          <ThemeProvider>
-            {children}
-            <ToastProvider />
-          </ThemeProvider>
-        </ClerkProvider>
+        <ThemeProvider>
+          {children}
+          <ToastProvider />
+        </ThemeProvider>
       </body>
     </html>
   );

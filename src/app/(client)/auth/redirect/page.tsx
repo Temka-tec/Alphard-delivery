@@ -1,23 +1,12 @@
 "use client";
 
-import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function AuthRedirectPage() {
-  const { isLoaded, userId } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoaded) {
-      return;
-    }
-
-    if (!userId) {
-      router.replace("/sign-in");
-      return;
-    }
-
     const controller = new AbortController();
 
     const resolveRedirect = async () => {
@@ -46,7 +35,7 @@ export default function AuthRedirectPage() {
     return () => {
       controller.abort();
     };
-  }, [isLoaded, router, userId]);
+  }, [router]);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[var(--color-bg)] px-6 py-10 text-[var(--color-text)]">

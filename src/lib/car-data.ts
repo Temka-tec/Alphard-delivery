@@ -6,7 +6,7 @@ import { Prisma } from "@/generated/prisma/client";
 export type CarListItem = {
   id: string;
   slug: string;
-  ownerClerkId: string | null;
+  ownerId: string | null;
   icon: string;
   photos: string[];
   heroImage: string | null;
@@ -138,7 +138,7 @@ const mapCarRecord = (car: Awaited<ReturnType<typeof getCarsRaw>>[number]): CarL
   return {
     id: car.id,
     slug: car.slug,
-    ownerClerkId: car.driver?.user.clerkId || null,
+    ownerId: car.driver?.user.id || null,
     icon: shortCode,
     photos: car.photos.filter(isStoredImagePath),
     heroImage: car.photos.find(isStoredImagePath) || null,
@@ -181,19 +181,19 @@ const formatReviewDate = (value: Date) =>
 async function getCarsRaw(options?: {
   limit?: number;
   slug?: string;
-  excludeClerkId?: string | null;
+  excludeUserId?: string | null;
 }) {
   try {
     return await prisma.car.findMany({
       where: {
         ...(options?.slug ? { slug: options.slug } : {}),
         ...(options?.slug ? {} : { status: "AVAILABLE" }),
-        ...(options?.excludeClerkId
+        ...(options?.excludeUserId
           ? {
               NOT: {
                 driver: {
                   user: {
-                    clerkId: options.excludeClerkId,
+                    id: options.excludeUserId,
                   },
                 },
               },
@@ -243,8 +243,8 @@ async function getCarsRaw(options?: {
   }
 }
 
-export async function getAvailableCars(limit?: number, excludeClerkId?: string | null) {
-  const cars = await getCarsRaw({ limit, excludeClerkId });
+export async function getAvailableCars(limit?: number, excludeUserId?: string | null) {
+  const cars = await getCarsRaw({ limit, excludeUserId });
   return cars.map(mapCarRecord);
 }
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -129,7 +128,6 @@ export const BookingExperience = ({
   viewerDisplayName: string | null;
   useDriverDisplayName: boolean;
 }) => {
-  const { isLoaded, user } = useUser();
   const bookingCars = useMemo(() => mapBookingCars(initialCars), [initialCars]);
   const [recentBookings, setRecentBookings] = useState(initialBookings);
   const [selectedCar, setSelectedCar] = useState<BookingCar | null>(null);
@@ -241,13 +239,7 @@ export const BookingExperience = ({
     imageViewerIndex === null
       ? null
       : (activeCarImages[imageViewerIndex] ?? null);
-  const clerkDisplayName =
-    user?.fullName ||
-    [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
-    null;
-  const displayName = useDriverDisplayName
-    ? viewerDisplayName || clerkDisplayName || "Хэрэглэгч"
-    : clerkDisplayName || viewerDisplayName || "Хэрэглэгч";
+  const displayName = viewerDisplayName || "Хэрэглэгч";
 
   useEffect(() => {
     if (imageViewerIndex === null) {
@@ -483,17 +475,9 @@ export const BookingExperience = ({
             <span className="text-sm text-[var(--color-muted)]">
               Сайн байна уу, {displayName}
             </span>
-            {isLoaded ? (
-              <UserButton
-                appearance={{
-                  elements: {
-                    avatarBox: "h-9 w-9 ring-1 ring-[rgba(201,168,76,0.3)]",
-                  },
-                }}
-              />
-            ) : (
-              <div className="h-9 w-9 rounded-full border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.15)]" />
-            )}
+            <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.15)] text-sm font-semibold text-[var(--color-gold)]">
+              {displayName.slice(0, 1).toUpperCase()}
+            </div>
           </div>
         </header>
 

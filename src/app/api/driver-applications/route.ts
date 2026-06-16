@@ -1,10 +1,10 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Prisma } from "@/generated/prisma/client";
 import { Resend } from "resend";
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/session";
 
 const recipientEmail =
   process.env.DRIVER_APPLICATION_TO_EMAIL || "tematekoo198@gmail.com";
@@ -107,13 +107,12 @@ const getFileExtension = (file: File) => {
 };
 
 export async function POST(req: Request) {
-  const { userId } = await auth();
+  const session = await getSession();
 
-  if (!userId) {
+  if (!session.userId) {
     return new Response("Нэвтэрсэн хэрэглэгч байхгүй байна.", { status: 401 });
   }
 
-  const user = await currentUser();
   const formData = await req.formData();
   const body = Object.fromEntries(
     Object.keys(fieldLabels).map((key) => [key, getTextValue(formData.get(key))]),
@@ -232,37 +231,22 @@ export async function POST(req: Request) {
     )
     .join("");
 
-  const clerkName =
-    user?.fullName || [user?.firstName, user?.lastName].filter(Boolean).join(" ") || "Unknown";
-  const clerkEmail =
-    user?.primaryEmailAddress?.emailAddress || body.email || "Unknown";
-  const applicantEmail = body.email?.toString().trim() || clerkEmail;
+  const applicantEmail = body.email?.toString().trim();
   const applicationFullName =
     [body.lastName, body.firstName].filter(Boolean).join(" ").trim() || null;
+
   try {
-    const primaryEmail =
-      user?.primaryEmailAddress?.emailAddress || body.email || `${userId}@clerk.local`;
-    const dbUser = await prisma.user.upsert({
-      where: {
-        clerkId: userId,
-      },
-      update: {
-        email: primaryEmail,
+    const dbUser = await prisma.user.update({
+      where: { id: session.userId },
+      data: {
         name: applicationFullName,
-        phone: body.phone || user?.phoneNumbers?.[0]?.phoneNumber || null,
-      },
-      create: {
-        clerkId: userId,
-        email: primaryEmail,
-        name: applicationFullName ?? (clerkName === "Unknown" ? null : clerkName),
-        phone: body.phone || user?.phoneNumbers?.[0]?.phoneNumber || null,
+        phone: body.phone || null,
       },
     });
 
     await prisma.driverApplication.create({
       data: {
         userId: dbUser.id,
-        clerkId: userId,
         lastName: body.lastName,
         firstName: body.firstName,
         phone: body.phone,
@@ -340,7 +324,6 @@ export async function POST(req: Request) {
         html: `
           <div style="font-family:Arial,sans-serif;line-height:1.6;color:#111827">
             <h2 style="margin-bottom:8px;">Шинэ жолоочийн хүсэлт ирлээ</h2>
-            <p style="margin:0 0 16px;">Clerk хэрэглэгч: <strong>${escapeHtml(clerkName)}</strong> (${escapeHtml(clerkEmail)})</p>
             <table style="border-collapse:collapse;width:100%;max-width:760px">
               <tbody>${rows}</tbody>
             </table>

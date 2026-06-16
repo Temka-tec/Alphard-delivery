@@ -13,7 +13,7 @@ export const HeroSection = async () => {
     !viewer.hasDriverApplication;
 
   return (
-    <section className="relative overflow-hidden border-b border-white/8 bg-[linear-gradient(135deg,#0A0A0F_0%,#12121A_50%,#0F0F18_100%)] px-4 py-16 sm:px-6 lg:px-10 lg:py-28">
+    <section className="relative overflow-hidden border-b border-[var(--color-text)]/8 bg-[linear-gradient(135deg,var(--color-bg)_0%,var(--color-panel)_50%,var(--color-bg)_100%)] px-4 py-16 sm:px-6 lg:px-10 lg:py-28">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(201,168,76,0.08)_0%,transparent_70%)]" />
 
       <div className="relative mx-auto max-w-5xl text-center">
@@ -66,6 +66,7 @@ export const HeroSection = async () => {
             <DriverRegistrationDialog
               label="Жолоочийн хүсэлт өгөх"
               className="rounded-xl border border-white/15 px-6 py-4 text-center text-sm font-medium text-[var(--color-text)] transition hover:border-[rgba(201,168,76,0.4)] hover:text-[var(--color-gold)] sm:px-8"
+              isSignedIn={viewer.isSignedIn}
             />
           ) : null}
         </div>
