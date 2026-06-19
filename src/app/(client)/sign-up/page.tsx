@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
-export default function SignUpPage() {
+function SignUpForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get("redirect_url") || "/";
@@ -41,6 +41,82 @@ export default function SignUpPage() {
     }
   };
 
+  return (
+    <div className="w-full max-w-md rounded-[28px] border border-white/8 bg-[var(--color-surface)] p-6 shadow-[0_18px_60px_rgba(0,0,0,0.35)] sm:p-8">
+      <h2 className="font-display text-2xl font-extrabold text-[var(--color-text)]">
+        Бүртгүүлэх
+      </h2>
+      <p className="mt-1 text-sm text-[var(--color-muted)]">
+        Бүртгэлтэй юу?{" "}
+        <Link
+          href={`/sign-in?redirect_url=${encodeURIComponent(redirectUrl)}`}
+          className="text-[var(--color-gold)] hover:text-[var(--color-gold-light)]"
+        >
+          Нэвтрэх
+        </Link>
+      </p>
+
+      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        <div>
+          <label className="mb-1.5 block text-xs text-[var(--color-muted)]">
+            Нэр (заавал биш)
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Таны нэр"
+            className="w-full rounded-xl border border-white/8 bg-[var(--color-panel)] px-4 py-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-1 focus:ring-[rgba(201,168,76,0.4)]"
+          />
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-xs text-[var(--color-muted)]">
+            И-мэйл хаяг
+          </label>
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="example@mail.com"
+            className="w-full rounded-xl border border-white/8 bg-[var(--color-panel)] px-4 py-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-1 focus:ring-[rgba(201,168,76,0.4)]"
+          />
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-xs text-[var(--color-muted)]">
+            Нууц үг
+          </label>
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Хамгийн багадаа 6 тэмдэгт"
+            className="w-full rounded-xl border border-white/8 bg-[var(--color-panel)] px-4 py-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-1 focus:ring-[rgba(201,168,76,0.4)]"
+          />
+        </div>
+
+        {error ? (
+          <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+            {error}
+          </div>
+        ) : null}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="btn-shine w-full rounded-xl bg-[var(--color-gold)] px-4 py-3 text-sm font-medium text-[var(--color-ink)] disabled:opacity-60"
+        >
+          {loading ? "Бүртгэж байна..." : "Бүртгүүлэх"}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export default function SignUpPage() {
   return (
     <main className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
       <div className="grid min-h-screen lg:grid-cols-2">
@@ -82,77 +158,9 @@ export default function SignUpPage() {
         </section>
 
         <section className="flex items-center justify-center p-6 sm:p-8">
-          <div className="w-full max-w-md rounded-[28px] border border-white/8 bg-[var(--color-surface)] p-6 shadow-[0_18px_60px_rgba(0,0,0,0.35)] sm:p-8">
-            <h2 className="font-display text-2xl font-extrabold text-[var(--color-text)]">
-              Бүртгүүлэх
-            </h2>
-            <p className="mt-1 text-sm text-[var(--color-muted)]">
-              Бүртгэлтэй юу?{" "}
-              <Link
-                href={`/sign-in?redirect_url=${encodeURIComponent(redirectUrl)}`}
-                className="text-[var(--color-gold)] hover:text-[var(--color-gold-light)]"
-              >
-                Нэвтрэх
-              </Link>
-            </p>
-
-            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-              <div>
-                <label className="mb-1.5 block text-xs text-[var(--color-muted)]">
-                  Нэр (заавал биш)
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Таны нэр"
-                  className="w-full rounded-xl border border-white/8 bg-[var(--color-panel)] px-4 py-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-1 focus:ring-[rgba(201,168,76,0.4)]"
-                />
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-xs text-[var(--color-muted)]">
-                  И-мэйл хаяг
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="example@mail.com"
-                  className="w-full rounded-xl border border-white/8 bg-[var(--color-panel)] px-4 py-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-1 focus:ring-[rgba(201,168,76,0.4)]"
-                />
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-xs text-[var(--color-muted)]">
-                  Нууц үг
-                </label>
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Хамгийн багадаа 6 тэмдэгт"
-                  className="w-full rounded-xl border border-white/8 bg-[var(--color-panel)] px-4 py-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-1 focus:ring-[rgba(201,168,76,0.4)]"
-                />
-              </div>
-
-              {error ? (
-                <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-                  {error}
-                </div>
-              ) : null}
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="btn-shine w-full rounded-xl bg-[var(--color-gold)] px-4 py-3 text-sm font-medium text-[var(--color-ink)] disabled:opacity-60"
-              >
-                {loading ? "Бүртгэж байна..." : "Бүртгүүлэх"}
-              </button>
-            </form>
-          </div>
+          <Suspense fallback={<div className="w-full max-w-md animate-pulse rounded-[28px] border border-white/8 bg-[var(--color-surface)] p-8 h-64" />}>
+            <SignUpForm />
+          </Suspense>
         </section>
       </div>
     </main>
