@@ -28,17 +28,17 @@ export const DriverRegistrationScaffold = ({
         </Link>
       </div>
 
-      <div className="mb-12 grid grid-cols-4 gap-3">
+      <div className="mb-12 grid grid-cols-4 gap-1.5 sm:gap-3">
         {[
           { label: "Хэрэглэгч", status: "done", mark: "✓" },
           {
-            label: "Жолоочийн хүсэлт",
+            label: "Жолооч",
             status:
               activeStep === 1 ? "active" : activeStep > 1 ? "done" : "idle",
             mark: activeStep > 1 ? "✓" : "2",
           },
           {
-            label: "Баримт ба машин",
+            label: "Баримт",
             status:
               activeStep === 2 ? "active" : activeStep > 2 ? "done" : "idle",
             mark: activeStep > 2 ? "✓" : "3",
@@ -60,7 +60,7 @@ export const DriverRegistrationScaffold = ({
               />
             ) : null}
             <div
-              className={`relative z-10 flex h-9 w-9 items-center justify-center rounded-full border text-sm font-bold ${
+              className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full border text-xs font-bold sm:h-9 sm:w-9 sm:text-sm ${
                 step.status === "done"
                   ? "border-[var(--color-gold)] bg-[var(--color-gold)] text-[var(--color-ink)]"
                   : step.status === "active"
@@ -71,7 +71,7 @@ export const DriverRegistrationScaffold = ({
               {step.mark}
             </div>
             <span
-              className={`mt-2 text-center text-[11px] ${
+              className={`mt-1.5 text-center text-[10px] sm:mt-2 sm:text-[11px] ${
                 step.status === "active"
                   ? "text-[var(--color-gold)]"
                   : "text-[var(--color-muted)]"

@@ -106,6 +106,94 @@ const getSeatBucket = (car: BookingCar) => {
   return "4-5 суудал";
 };
 
+type FilterContentProps = {
+  availableMakes: string[];
+  availableSeatBuckets: string[];
+  availableTransmissions: string[];
+  bookingCars: BookingCar[];
+  selectedMakes: string[];
+  selectedSeatBuckets: string[];
+  selectedTransmissions: string[];
+  priceMax: number;
+  toggleValue: (current: string[], next: string, update: (v: string[]) => void) => void;
+  setSelectedMakes: (v: string[]) => void;
+  setSelectedSeatBuckets: (v: string[]) => void;
+  setSelectedTransmissions: (v: string[]) => void;
+  setPriceMax: (v: number) => void;
+};
+
+const FilterContent = ({
+  availableMakes,
+  availableSeatBuckets,
+  availableTransmissions,
+  bookingCars,
+  selectedMakes,
+  selectedSeatBuckets,
+  selectedTransmissions,
+  priceMax,
+  toggleValue,
+  setSelectedMakes,
+  setSelectedSeatBuckets,
+  setSelectedTransmissions,
+  setPriceMax,
+}: FilterContentProps) => (
+  <div className="space-y-5">
+    <div>
+      <p className="mb-3 text-[11px] uppercase tracking-[0.08em] text-[var(--color-muted)]">Марк</p>
+      <div className="space-y-2.5">
+        {availableMakes.map((make) => {
+          const count = bookingCars.filter((car) => (car.name.split(" ")[0] || car.name) === make).length;
+          return (
+            <label key={make} className="flex cursor-pointer items-center gap-2">
+              <input checked={selectedMakes.includes(make)} onChange={() => toggleValue(selectedMakes, make, setSelectedMakes)} type="checkbox" className="h-4 w-4 accent-[var(--color-gold)]" />
+              <span className="text-sm text-[var(--color-muted)]">{make}</span>
+              <span className="ml-auto rounded-full border border-white/8 bg-[var(--color-panel)] px-2 py-0.5 text-[11px] text-[#5A5856]">{count}</span>
+            </label>
+          );
+        })}
+      </div>
+    </div>
+    <div className="border-t border-white/8 pt-5">
+      <p className="mb-3 text-[11px] uppercase tracking-[0.08em] text-[var(--color-muted)]">Суудлын тоо</p>
+      <div className="space-y-2.5">
+        {availableSeatBuckets.map((bucket) => {
+          const count = bookingCars.filter((car) => getSeatBucket(car) === bucket).length;
+          return (
+            <label key={bucket} className="flex cursor-pointer items-center gap-2">
+              <input checked={selectedSeatBuckets.includes(bucket)} onChange={() => toggleValue(selectedSeatBuckets, bucket, setSelectedSeatBuckets)} type="checkbox" className="h-4 w-4 accent-[var(--color-gold)]" />
+              <span className="text-sm text-[var(--color-muted)]">{bucket}</span>
+              <span className="ml-auto rounded-full border border-white/8 bg-[var(--color-panel)] px-2 py-0.5 text-[11px] text-[#5A5856]">{count}</span>
+            </label>
+          );
+        })}
+      </div>
+    </div>
+    <div className="border-t border-white/8 pt-5">
+      <p className="mb-3 text-[11px] uppercase tracking-[0.08em] text-[var(--color-muted)]">Хурдны хайрцаг</p>
+      <div className="space-y-2.5">
+        {availableTransmissions.map((item) => {
+          const count = bookingCars.filter((car) => car.transmission === item).length;
+          return (
+            <label key={item} className="flex cursor-pointer items-center gap-2">
+              <input checked={selectedTransmissions.includes(item)} onChange={() => toggleValue(selectedTransmissions, item, setSelectedTransmissions)} type="checkbox" className="h-4 w-4 accent-[var(--color-gold)]" />
+              <span className="text-sm text-[var(--color-muted)]">{item}</span>
+              <span className="ml-auto rounded-full border border-white/8 bg-[var(--color-panel)] px-2 py-0.5 text-[11px] text-[#5A5856]">{count}</span>
+            </label>
+          );
+        })}
+      </div>
+    </div>
+    <div className="border-t border-white/8 pt-5">
+      <p className="mb-3 text-[11px] uppercase tracking-[0.08em] text-[var(--color-muted)]">Өдрийн үнэ (₮)</p>
+      <input type="range" min="50000" max="500000" value={priceMax} onChange={(e) => setPriceMax(Number(e.target.value))} className="w-full accent-[var(--color-gold)]" />
+      <div className="mt-1 flex justify-between text-[11px] text-[var(--color-muted)]">
+        <span>₮50,000</span>
+        <span>{formatPrice(priceMax)}</span>
+      </div>
+    </div>
+  </div>
+);
+
 const buildInitialReviewDrafts = (bookings: RecentBooking[]) =>
   Object.fromEntries(
     bookings.map((booking) => [
@@ -160,6 +248,7 @@ export const BookingExperience = ({
     buildInitialReviewDrafts(initialBookings),
   );
   const [reviewError, setReviewError] = useState<string | null>(null);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [reviewSubmittingId, setReviewSubmittingId] = useState<string | null>(
     null,
   );
@@ -545,7 +634,67 @@ export const BookingExperience = ({
         </section>
 
         <section className="grid min-h-[680px] lg:grid-cols-[280px_1fr]">
-          <aside className="border-r border-white/8 bg-[var(--color-surface)] p-6">
+          {/* Mobile filter toggle bar */}
+          <div className="flex items-center justify-between border-b border-white/8 bg-[var(--color-surface)] px-4 py-3 lg:hidden">
+            <button
+              type="button"
+              onClick={() => setMobileFiltersOpen(true)}
+              className="flex items-center gap-2 rounded-lg border border-white/10 bg-[var(--color-panel)] px-3 py-2 text-sm text-[var(--color-text)]"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+              Шүүлт
+              {(selectedMakes.length + selectedSeatBuckets.length + selectedTransmissions.length) > 0 && (
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-gold)] text-[10px] font-bold text-[var(--color-ink)]">
+                  {selectedMakes.length + selectedSeatBuckets.length + selectedTransmissions.length}
+                </span>
+              )}
+            </button>
+            <span className="text-xs text-[var(--color-muted)]">{filteredCars.length} машин</span>
+          </div>
+
+          {/* Mobile filter drawer overlay */}
+          {mobileFiltersOpen && (
+            <div className="fixed inset-0 z-50 lg:hidden" onClick={() => setMobileFiltersOpen(false)}>
+              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+              <div
+                className="absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-[24px] border-t border-white/8 bg-[var(--color-surface)] p-5"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="mb-1 flex justify-center"><div className="h-1 w-10 rounded-full bg-white/20" /></div>
+                <div className="mb-5 mt-3 flex items-center justify-between">
+                  <h2 className="font-display text-sm font-bold">Шүүлт</h2>
+                  <div className="flex items-center gap-3">
+                    <button type="button" onClick={resetFilters} className="text-xs text-[var(--color-gold)]">Цэвэрлэх</button>
+                    <button type="button" onClick={() => setMobileFiltersOpen(false)} className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-[var(--color-muted)]">Хаах</button>
+                  </div>
+                </div>
+                <FilterContent
+                  availableMakes={availableMakes}
+                  availableSeatBuckets={availableSeatBuckets}
+                  availableTransmissions={availableTransmissions}
+                  bookingCars={bookingCars}
+                  selectedMakes={selectedMakes}
+                  selectedSeatBuckets={selectedSeatBuckets}
+                  selectedTransmissions={selectedTransmissions}
+                  priceMax={priceMax}
+                  toggleValue={toggleValue}
+                  setSelectedMakes={setSelectedMakes}
+                  setSelectedSeatBuckets={setSelectedSeatBuckets}
+                  setSelectedTransmissions={setSelectedTransmissions}
+                  setPriceMax={setPriceMax}
+                />
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(false)}
+                  className="mt-5 w-full rounded-xl bg-[var(--color-gold)] py-3 text-sm font-medium text-[var(--color-ink)]"
+                >
+                  {filteredCars.length} машин харах
+                </button>
+              </div>
+            </div>
+          )}
+
+          <aside className="hidden border-r border-white/8 bg-[var(--color-surface)] p-6 lg:block">
             <div className="mb-6 flex items-center justify-between">
               <h2 className="font-display text-sm font-bold">Шүүлт</h2>
               <button
@@ -557,138 +706,21 @@ export const BookingExperience = ({
               </button>
             </div>
 
-            <div className="space-y-5">
-              <div>
-                <p className="mb-3 text-[11px] uppercase tracking-[0.08em] text-[var(--color-muted)]">
-                  Марк
-                </p>
-                <div className="space-y-2.5">
-                  {availableMakes.map((make) => {
-                    const count = bookingCars.filter(
-                      (car) => (car.name.split(" ")[0] || car.name) === make,
-                    ).length;
-
-                    return (
-                      <label
-                        key={make}
-                        className="flex cursor-pointer items-center gap-2"
-                      >
-                        <input
-                          checked={selectedMakes.includes(make)}
-                          onChange={() =>
-                            toggleValue(selectedMakes, make, setSelectedMakes)
-                          }
-                          type="checkbox"
-                          className="h-4 w-4 accent-[var(--color-gold)]"
-                        />
-                        <span className="text-sm text-[var(--color-muted)]">
-                          {make}
-                        </span>
-                        <span className="ml-auto rounded-full border border-white/8 bg-[var(--color-panel)] px-2 py-0.5 text-[11px] text-[#5A5856]">
-                          {count}
-                        </span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="border-t border-white/8 pt-5">
-                <p className="mb-3 text-[11px] uppercase tracking-[0.08em] text-[var(--color-muted)]">
-                  Суудлын тоо
-                </p>
-                <div className="space-y-2.5">
-                  {availableSeatBuckets.map((bucket) => {
-                    const count = bookingCars.filter(
-                      (car) => getSeatBucket(car) === bucket,
-                    ).length;
-
-                    return (
-                      <label
-                        key={bucket}
-                        className="flex cursor-pointer items-center gap-2"
-                      >
-                        <input
-                          checked={selectedSeatBuckets.includes(bucket)}
-                          onChange={() =>
-                            toggleValue(
-                              selectedSeatBuckets,
-                              bucket,
-                              setSelectedSeatBuckets,
-                            )
-                          }
-                          type="checkbox"
-                          className="h-4 w-4 accent-[var(--color-gold)]"
-                        />
-                        <span className="text-sm text-[var(--color-muted)]">
-                          {bucket}
-                        </span>
-                        <span className="ml-auto rounded-full border border-white/8 bg-[var(--color-panel)] px-2 py-0.5 text-[11px] text-[#5A5856]">
-                          {count}
-                        </span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="border-t border-white/8 pt-5">
-                <p className="mb-3 text-[11px] uppercase tracking-[0.08em] text-[var(--color-muted)]">
-                  Хурдны хайрцаг
-                </p>
-                <div className="space-y-2.5">
-                  {availableTransmissions.map((item) => {
-                    const count = bookingCars.filter(
-                      (car) => car.transmission === item,
-                    ).length;
-
-                    return (
-                      <label
-                        key={item}
-                        className="flex cursor-pointer items-center gap-2"
-                      >
-                        <input
-                          checked={selectedTransmissions.includes(item)}
-                          onChange={() =>
-                            toggleValue(
-                              selectedTransmissions,
-                              item,
-                              setSelectedTransmissions,
-                            )
-                          }
-                          type="checkbox"
-                          className="h-4 w-4 accent-[var(--color-gold)]"
-                        />
-                        <span className="text-sm text-[var(--color-muted)]">
-                          {item}
-                        </span>
-                        <span className="ml-auto rounded-full border border-white/8 bg-[var(--color-panel)] px-2 py-0.5 text-[11px] text-[#5A5856]">
-                          {count}
-                        </span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="border-t border-white/8 pt-5">
-                <p className="mb-3 text-[11px] uppercase tracking-[0.08em] text-[var(--color-muted)]">
-                  Өдрийн үнэ (₮)
-                </p>
-                <input
-                  type="range"
-                  min="50000"
-                  max="500000"
-                  value={priceMax}
-                  onChange={(event) => setPriceMax(Number(event.target.value))}
-                  className="w-full accent-[var(--color-gold)]"
-                />
-                <div className="mt-1 flex justify-between text-[11px] text-[var(--color-muted)]">
-                  <span>₮50,000</span>
-                  <span>{formatPrice(priceMax)}</span>
-                </div>
-              </div>
-            </div>
+            <FilterContent
+              availableMakes={availableMakes}
+              availableSeatBuckets={availableSeatBuckets}
+              availableTransmissions={availableTransmissions}
+              bookingCars={bookingCars}
+              selectedMakes={selectedMakes}
+              selectedSeatBuckets={selectedSeatBuckets}
+              selectedTransmissions={selectedTransmissions}
+              priceMax={priceMax}
+              toggleValue={toggleValue}
+              setSelectedMakes={setSelectedMakes}
+              setSelectedSeatBuckets={setSelectedSeatBuckets}
+              setSelectedTransmissions={setSelectedTransmissions}
+              setPriceMax={setPriceMax}
+            />
           </aside>
 
           <div className="p-6">
@@ -736,7 +768,7 @@ export const BookingExperience = ({
                         : "border-white/8"
                     }`}
                   >
-                    <div className="relative flex min-h-44 items-center justify-center overflow-hidden bg-[linear-gradient(135deg,var(--color-panel),#1E1E2C)] text-6xl">
+                    <div className="relative flex min-h-36 items-center justify-center overflow-hidden bg-[linear-gradient(135deg,var(--color-panel),#1E1E2C)] text-6xl sm:min-h-44">
                       {car.heroImage ? (
                         <Image
                           src={car.heroImage}
@@ -801,31 +833,39 @@ export const BookingExperience = ({
                       </div>
                     </div>
 
-                    <div className="flex flex-col justify-between border-t border-white/8 p-5 xl:border-l xl:border-t-0">
-                      <div>
-                        <div className="mb-1 flex items-center justify-end gap-1 text-xs">
-                          <span className="text-[var(--color-gold)]">
-                            ★★★★★
-                          </span>
-                          <span className="font-medium">
-                            {car.rating.toFixed(1)}
-                          </span>
-                          <span className="text-[var(--color-muted)]">
-                            ({car.ratingCount})
-                          </span>
+                    <div className="flex flex-col justify-between border-t border-white/8 p-4 xl:border-l xl:border-t-0 xl:p-5">
+                      {/* Mobile: price + buttons in one compact row */}
+                      <div className="flex items-center justify-between gap-3 xl:block">
+                        <div>
+                          <div className="flex items-center gap-1 text-xs xl:justify-end">
+                            <span className="text-[var(--color-gold)]">★</span>
+                            <span className="font-medium">{car.rating.toFixed(1)}</span>
+                            <span className="text-[var(--color-muted)]">({car.ratingCount})</span>
+                          </div>
+                          <div className="font-display text-xl font-bold text-[var(--color-gold)] xl:text-right xl:text-2xl">
+                            {formatPrice(car.price)}
+                          </div>
+                          <p className="text-xs text-[var(--color-muted)] xl:text-right">/ өдөр</p>
                         </div>
-                        <p className="text-right text-[10px] text-[var(--color-muted)]">
-                          Өдрийн үнэ
-                        </p>
-                        <div className="font-display text-right text-2xl font-bold text-[var(--color-gold)]">
-                          {formatPrice(car.price)}
+                        {/* Mobile inline buttons */}
+                        <div className="flex flex-col gap-2 xl:hidden">
+                          <button
+                            type="button"
+                            onClick={() => openBooking(car)}
+                            className="rounded-lg bg-[var(--color-gold)] px-4 py-2 text-sm font-medium text-[var(--color-ink)] transition hover:bg-[var(--color-gold-light)]"
+                          >
+                            Захиалах
+                          </button>
+                          <Link
+                            href={`/cars/${car.slug}`}
+                            className="rounded-lg border border-white/8 px-4 py-2 text-center text-sm text-[var(--color-muted)] transition hover:border-[rgba(201,168,76,0.25)] hover:text-[var(--color-text)]"
+                          >
+                            Дэлгэрэнгүй
+                          </Link>
                         </div>
-                        <p className="text-right text-xs text-[var(--color-muted)]">
-                          / өдөр
-                        </p>
                       </div>
 
-                      <div className="mt-4 space-y-2">
+                      <div className="mt-4 hidden space-y-2 xl:block">
                         <button
                           type="button"
                           onClick={() => openBooking(car)}
@@ -1024,7 +1064,7 @@ export const BookingExperience = ({
             }
           }}
         >
-          <div className="w-full max-w-3xl overflow-hidden rounded-[24px] border border-[rgba(201,168,76,0.25)] bg-[var(--color-surface)]">
+          <div className="w-full max-w-3xl overflow-y-auto rounded-[24px] border border-[rgba(201,168,76,0.25)] bg-[var(--color-surface)] max-h-[95dvh] sm:max-h-[90vh]">
             {success ? (
               <div className="p-8 text-center">
                 <div className="text-5xl">✅</div>

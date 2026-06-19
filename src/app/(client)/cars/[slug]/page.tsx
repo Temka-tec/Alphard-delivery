@@ -27,7 +27,7 @@ export default async function CarDetailsPage({
   const locationSelection = parseLocationSelection(car.location);
 
   return (
-    <main className="min-h-screen bg-[var(--color-bg)] px-4 py-6 text-[var(--color-text)] sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[var(--color-bg)] px-4 pb-24 pt-6 text-[var(--color-text)] sm:px-6 sm:pb-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="mb-6 flex items-center justify-between gap-4">
           <Link
@@ -200,13 +200,33 @@ export default async function CarDetailsPage({
             </div>
           </section>
 
-          <CarDetailSidebar
-            car={car}
-            initialAimag={locationSelection.aimag}
-            initialDestination={locationSelection.destination}
-            isOwnCar={isOwnCar}
-            userId={viewer.user?.id ?? null}
-          />
+          <div id="booking-sidebar">
+            <CarDetailSidebar
+              car={car}
+              initialAimag={locationSelection.aimag}
+              initialDestination={locationSelection.destination}
+              isOwnCar={isOwnCar}
+              userId={viewer.user?.id ?? null}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile sticky bottom bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-white/8 bg-[var(--color-surface)]/95 px-4 py-3 backdrop-blur sm:hidden">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <div className="font-display text-xl font-bold text-[var(--color-gold)]">
+              {formatPrice(car.priceValue)}
+            </div>
+            <div className="text-xs text-[var(--color-muted)]">/ өдөр</div>
+          </div>
+          <a
+            href="#booking-sidebar"
+            className="flex-1 rounded-xl bg-[var(--color-gold)] py-3 text-center text-sm font-medium text-[var(--color-ink)]"
+          >
+            Захиалах
+          </a>
         </div>
       </div>
     </main>

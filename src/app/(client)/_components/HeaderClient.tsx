@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useRipple } from "@/hooks/use-ripple";
 import { navItems } from "./landing-data";
@@ -131,10 +132,10 @@ export const HeaderClient = ({ isAdmin, isSignedIn, displayName }: HeaderClientP
             <button
               type="button"
               onClick={() => setIsMenuOpen((c) => !c)}
-              className="rounded-lg border border-[var(--color-text)]/10 px-3 py-2 text-sm text-[var(--color-text)]"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--color-text)]/10 text-[var(--color-text)]"
               aria-label="Menu нээх"
             >
-              {isMenuOpen ? "Хаах" : "Цэс"}
+              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>
