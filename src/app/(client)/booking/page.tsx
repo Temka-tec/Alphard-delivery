@@ -62,7 +62,6 @@ export default async function BookingPage() {
         },
       }))}
       viewerDisplayName={viewer.displayName}
-      useDriverDisplayName={viewer.isDriver || viewer.hasDriverApplication}
     />
   );
 }

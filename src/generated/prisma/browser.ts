@@ -47,3 +47,8 @@ export type Review = Prisma.ReviewModel
  * 
  */
 export type DriverApplication = Prisma.DriverApplicationModel
+/**
+ * Model PasswordResetToken
+ * 
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel

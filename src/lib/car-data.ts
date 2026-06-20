@@ -34,6 +34,7 @@ export type CarListItem = {
     rating: string;
     trips: number;
     phone: string;
+    photoUrl: string | null;
   };
 };
 
@@ -131,6 +132,8 @@ const mapCarRecord = (car: Awaited<ReturnType<typeof getCarsRaw>>[number]): CarL
     "Жолооч удахгүй";
   const driverPhone =
     car.driver?.user.phone || latestApplication?.phone || "Утас удахгүй";
+  const driverPhotoUrl =
+    car.driver?.photoUrl || latestApplication?.profilePhotoName || null;
   const driverExperience = car.driver?.experience || "Туршлага удахгүй";
   const driverClass = car.driver?.licenseClass || "Ангилал удахгүй";
   const shortCode = titleCase(car.model).slice(0, 3).toUpperCase() || "CAR";
@@ -169,6 +172,7 @@ const mapCarRecord = (car: Awaited<ReturnType<typeof getCarsRaw>>[number]): CarL
       rating: reviewCount > 0 ? `${rating.toFixed(1)}★` : "Шинэ",
       trips: car.bookings.length,
       phone: driverPhone,
+      photoUrl: driverPhotoUrl,
     },
   };
 };

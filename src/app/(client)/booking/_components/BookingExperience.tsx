@@ -86,114 +86,6 @@ const mapBookingCars = (cars: CarListItem[]): BookingCar[] =>
     premium: car.badge !== "Сул",
   }));
 
-const getSeatCount = (car: BookingCar) => {
-  const seatTag = car.tags.find((tag) => tag.includes("суудал")) || "";
-  const matched = seatTag.match(/\d+/);
-  return matched ? Number(matched[0]) : 0;
-};
-
-const getSeatBucket = (car: BookingCar) => {
-  const seatCount = getSeatCount(car);
-
-  if (seatCount >= 10) {
-    return "10+ суудал";
-  }
-
-  if (seatCount >= 7) {
-    return "7-8 суудал";
-  }
-
-  return "4-5 суудал";
-};
-
-type FilterContentProps = {
-  availableMakes: string[];
-  availableSeatBuckets: string[];
-  availableTransmissions: string[];
-  bookingCars: BookingCar[];
-  selectedMakes: string[];
-  selectedSeatBuckets: string[];
-  selectedTransmissions: string[];
-  priceMax: number;
-  toggleValue: (current: string[], next: string, update: (v: string[]) => void) => void;
-  setSelectedMakes: (v: string[]) => void;
-  setSelectedSeatBuckets: (v: string[]) => void;
-  setSelectedTransmissions: (v: string[]) => void;
-  setPriceMax: (v: number) => void;
-};
-
-const FilterContent = ({
-  availableMakes,
-  availableSeatBuckets,
-  availableTransmissions,
-  bookingCars,
-  selectedMakes,
-  selectedSeatBuckets,
-  selectedTransmissions,
-  priceMax,
-  toggleValue,
-  setSelectedMakes,
-  setSelectedSeatBuckets,
-  setSelectedTransmissions,
-  setPriceMax,
-}: FilterContentProps) => (
-  <div className="space-y-5">
-    <div>
-      <p className="mb-3 text-[11px] uppercase tracking-[0.08em] text-[var(--color-muted)]">Марк</p>
-      <div className="space-y-2.5">
-        {availableMakes.map((make) => {
-          const count = bookingCars.filter((car) => (car.name.split(" ")[0] || car.name) === make).length;
-          return (
-            <label key={make} className="flex cursor-pointer items-center gap-2">
-              <input checked={selectedMakes.includes(make)} onChange={() => toggleValue(selectedMakes, make, setSelectedMakes)} type="checkbox" className="h-4 w-4 accent-[var(--color-gold)]" />
-              <span className="text-sm text-[var(--color-muted)]">{make}</span>
-              <span className="ml-auto rounded-full border border-white/8 bg-[var(--color-panel)] px-2 py-0.5 text-[11px] text-[#5A5856]">{count}</span>
-            </label>
-          );
-        })}
-      </div>
-    </div>
-    <div className="border-t border-white/8 pt-5">
-      <p className="mb-3 text-[11px] uppercase tracking-[0.08em] text-[var(--color-muted)]">Суудлын тоо</p>
-      <div className="space-y-2.5">
-        {availableSeatBuckets.map((bucket) => {
-          const count = bookingCars.filter((car) => getSeatBucket(car) === bucket).length;
-          return (
-            <label key={bucket} className="flex cursor-pointer items-center gap-2">
-              <input checked={selectedSeatBuckets.includes(bucket)} onChange={() => toggleValue(selectedSeatBuckets, bucket, setSelectedSeatBuckets)} type="checkbox" className="h-4 w-4 accent-[var(--color-gold)]" />
-              <span className="text-sm text-[var(--color-muted)]">{bucket}</span>
-              <span className="ml-auto rounded-full border border-white/8 bg-[var(--color-panel)] px-2 py-0.5 text-[11px] text-[#5A5856]">{count}</span>
-            </label>
-          );
-        })}
-      </div>
-    </div>
-    <div className="border-t border-white/8 pt-5">
-      <p className="mb-3 text-[11px] uppercase tracking-[0.08em] text-[var(--color-muted)]">Хурдны хайрцаг</p>
-      <div className="space-y-2.5">
-        {availableTransmissions.map((item) => {
-          const count = bookingCars.filter((car) => car.transmission === item).length;
-          return (
-            <label key={item} className="flex cursor-pointer items-center gap-2">
-              <input checked={selectedTransmissions.includes(item)} onChange={() => toggleValue(selectedTransmissions, item, setSelectedTransmissions)} type="checkbox" className="h-4 w-4 accent-[var(--color-gold)]" />
-              <span className="text-sm text-[var(--color-muted)]">{item}</span>
-              <span className="ml-auto rounded-full border border-white/8 bg-[var(--color-panel)] px-2 py-0.5 text-[11px] text-[#5A5856]">{count}</span>
-            </label>
-          );
-        })}
-      </div>
-    </div>
-    <div className="border-t border-white/8 pt-5">
-      <p className="mb-3 text-[11px] uppercase tracking-[0.08em] text-[var(--color-muted)]">Өдрийн үнэ (₮)</p>
-      <input type="range" min="50000" max="500000" value={priceMax} onChange={(e) => setPriceMax(Number(e.target.value))} className="w-full accent-[var(--color-gold)]" />
-      <div className="mt-1 flex justify-between text-[11px] text-[var(--color-muted)]">
-        <span>₮50,000</span>
-        <span>{formatPrice(priceMax)}</span>
-      </div>
-    </div>
-  </div>
-);
-
 const buildInitialReviewDrafts = (bookings: RecentBooking[]) =>
   Object.fromEntries(
     bookings.map((booking) => [
@@ -209,27 +101,15 @@ export const BookingExperience = ({
   initialCars,
   initialBookings,
   viewerDisplayName,
-  useDriverDisplayName,
 }: {
   initialCars: CarListItem[];
   initialBookings: RecentBooking[];
   viewerDisplayName: string | null;
-  useDriverDisplayName: boolean;
 }) => {
   const bookingCars = useMemo(() => mapBookingCars(initialCars), [initialCars]);
   const [recentBookings, setRecentBookings] = useState(initialBookings);
   const [selectedCar, setSelectedCar] = useState<BookingCar | null>(null);
-  const [priceMax, setPriceMax] = useState(searchDefaults.priceMax);
-  const [searchStart, setSearchStart] = useState(searchDefaults.startDate);
-  const [searchEnd, setSearchEnd] = useState(searchDefaults.endDate);
-  const [routeQuery, setRouteQuery] = useState(searchDefaults.direction);
-  const [seatFilter, setSeatFilter] = useState("Бүгд");
   const [sortOrder, setSortOrder] = useState("Үнэ: бага → их");
-  const [selectedMakes, setSelectedMakes] = useState<string[]>([]);
-  const [selectedSeatBuckets, setSelectedSeatBuckets] = useState<string[]>([]);
-  const [selectedTransmissions, setSelectedTransmissions] = useState<string[]>(
-    [],
-  );
   const [modalStart, setModalStart] = useState(searchDefaults.startDate);
   const [modalEnd, setModalEnd] = useState(searchDefaults.endDate);
   const [selectedAimag, setSelectedAimag] = useState<string>(
@@ -248,50 +128,12 @@ export const BookingExperience = ({
     buildInitialReviewDrafts(initialBookings),
   );
   const [reviewError, setReviewError] = useState<string | null>(null);
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [reviewSubmittingId, setReviewSubmittingId] = useState<string | null>(
     null,
   );
 
-  const availableMakes = Array.from(
-    new Set(bookingCars.map((car) => car.name.split(" ")[0] || car.name)),
-  );
-  const availableSeatBuckets = ["4-5 суудал", "7-8 суудал", "10+ суудал"];
-  const availableTransmissions = Array.from(
-    new Set(bookingCars.map((car) => car.transmission)),
-  );
-
   const filteredCars = useMemo(() => {
-    const normalizedQuery = routeQuery.trim().toLowerCase();
-    const nextCars = bookingCars.filter((car) => {
-      const matchesMake =
-        selectedMakes.length === 0 ||
-        selectedMakes.includes(car.name.split(" ")[0] || car.name);
-      const matchesSeatBucket =
-        selectedSeatBuckets.length === 0 ||
-        selectedSeatBuckets.includes(getSeatBucket(car));
-      const matchesTransmission =
-        selectedTransmissions.length === 0 ||
-        selectedTransmissions.includes(car.transmission);
-      const matchesSeatSelect =
-        seatFilter === "Бүгд" || getSeatBucket(car) === seatFilter;
-      const matchesPrice = car.price <= priceMax;
-      const haystack = [car.name, car.location, car.meta, ...car.tags]
-        .join(" ")
-        .toLowerCase();
-      const matchesRoute =
-        !normalizedQuery || haystack.includes(normalizedQuery);
-
-      return (
-        matchesMake &&
-        matchesSeatBucket &&
-        matchesTransmission &&
-        matchesSeatSelect &&
-        matchesPrice &&
-        matchesRoute
-      );
-    });
-
+    const nextCars = [...bookingCars];
     return nextCars.sort((left, right) => {
       if (sortOrder === "Үнэ: их → бага") {
         return right.price - left.price;
@@ -309,16 +151,10 @@ export const BookingExperience = ({
     });
   }, [
     bookingCars,
-    priceMax,
-    routeQuery,
-    seatFilter,
-    selectedMakes,
-    selectedSeatBuckets,
-    selectedTransmissions,
     sortOrder,
   ]);
 
-  const activeCar = selectedCar ?? filteredCars[0] ?? bookingCars[0] ?? null;
+  const activeCar = selectedCar ?? bookingCars[0] ?? null;
   const activeCarImages = selectedCar?.photos.length
     ? selectedCar.photos
     : selectedCar?.heroImage
@@ -399,36 +235,12 @@ export const BookingExperience = ({
   const serviceFee = Math.round(subtotal * 0.05);
   const total = subtotal + serviceFee;
 
-  const toggleValue = (
-    currentValues: string[],
-    nextValue: string,
-    update: (value: string[]) => void,
-  ) => {
-    update(
-      currentValues.includes(nextValue)
-        ? currentValues.filter((value) => value !== nextValue)
-        : [...currentValues, nextValue],
-    );
-  };
-
-  const resetFilters = () => {
-    setPriceMax(searchDefaults.priceMax);
-    setSearchStart(searchDefaults.startDate);
-    setSearchEnd(searchDefaults.endDate);
-    setRouteQuery(searchDefaults.direction);
-    setSeatFilter("Бүгд");
-    setSortOrder("Үнэ: бага → их");
-    setSelectedMakes([]);
-    setSelectedSeatBuckets([]);
-    setSelectedTransmissions([]);
-  };
-
   const openBooking = (car: BookingCar) => {
-    const parsedLocation = parseLocationSelection(routeQuery || car.location);
+    const parsedLocation = parseLocationSelection(car.location);
 
     setSelectedCar(car);
-    setModalStart(searchStart);
-    setModalEnd(searchEnd);
+    setModalStart(searchDefaults.startDate);
+    setModalEnd(searchDefaults.endDate);
     setSelectedAimag(parsedLocation.aimag);
     setSelectedDestination(parsedLocation.destination);
     setRouteDetails("");
@@ -444,8 +256,8 @@ export const BookingExperience = ({
     setBookingCode("");
     setBookingError(null);
     setIsSubmitting(false);
-    setModalStart(searchStart);
-    setModalEnd(searchEnd);
+    setModalStart(searchDefaults.startDate);
+    setModalEnd(searchDefaults.endDate);
     setSelectedAimag(defaultLocationSelection.aimag);
     setSelectedDestination(defaultLocationSelection.destination);
     setRouteDetails("");
@@ -570,183 +382,29 @@ export const BookingExperience = ({
           </div>
         </header>
 
-        <section className="border-b border-white/8 bg-[var(--color-surface)] px-2 py-6 sm:px-4">
-          <p className="mb-3 text-[11px] uppercase tracking-[0.15em] text-[var(--color-muted)]">
-            Машин хайх
-          </p>
-          <div className="grid gap-3 lg:grid-cols-[1fr_1fr_1.2fr_1fr_auto] lg:items-end">
-            <label className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-[var(--color-muted)]">
-                Эхлэх огноо
-              </span>
-              <input
-                type="date"
-                value={searchStart}
-                onChange={(event) => setSearchStart(event.target.value)}
-                className="rounded-lg border border-white/8 bg-[var(--color-panel)] px-3 py-2.5 text-sm outline-none transition focus:border-[rgba(201,168,76,0.25)]"
-              />
-            </label>
-            <label className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-[var(--color-muted)]">
-                Дуусах огноо
-              </span>
-              <input
-                type="date"
-                value={searchEnd}
-                onChange={(event) => setSearchEnd(event.target.value)}
-                className="rounded-lg border border-white/8 bg-[var(--color-panel)] px-3 py-2.5 text-sm outline-none transition focus:border-[rgba(201,168,76,0.25)]"
-              />
-            </label>
-            <label className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-[var(--color-muted)]">
-                Чиглэл / байршил
-              </span>
-              <input
-                value={routeQuery}
-                onChange={(event) => setRouteQuery(event.target.value)}
-                type="text"
-                placeholder="Жишээ: Хоргын тогоо, Хатгал, Дархан..."
-                className="rounded-lg border border-white/8 bg-[var(--color-panel)] px-3 py-2.5 text-sm outline-none transition focus:border-[rgba(201,168,76,0.25)]"
-              />
-            </label>
-            <label className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-[var(--color-muted)]">
-                Суудлын тоо
-              </span>
-              <select
-                value={seatFilter}
-                onChange={(event) => setSeatFilter(event.target.value)}
-                className="rounded-lg border border-white/8 bg-[var(--color-panel)] px-3 py-2.5 text-sm outline-none transition focus:border-[rgba(201,168,76,0.25)]"
-              >
-                <option>Бүгд</option>
-                {availableSeatBuckets.map((option) => (
-                  <option key={option}>{option}</option>
-                ))}
-              </select>
-            </label>
-            <button
-              type="button"
-              className="h-11 rounded-lg bg-[var(--color-gold)] px-6 text-sm font-medium text-[var(--color-ink)]"
+        <section className="border-b border-white/8 bg-[var(--color-surface)] px-4 py-4 sm:px-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-[var(--color-muted)]">
+              <strong className="font-medium text-[var(--color-text)]">
+                {filteredCars.length}
+              </strong>{" "}
+              машин байна
+            </p>
+            <select
+              value={sortOrder}
+              onChange={(event) => setSortOrder(event.target.value)}
+              className="w-full rounded-lg border border-white/8 bg-[var(--color-panel)] px-3 py-2 text-xs text-[var(--color-muted)] outline-none sm:w-fit"
             >
-              {filteredCars.length} машин
-            </button>
+              <option>Үнэ: бага → их</option>
+              <option>Үнэ: их → бага</option>
+              <option>Үнэлгээгээр</option>
+              <option>Шинэ нэмэгдсэн</option>
+            </select>
           </div>
         </section>
 
-        <section className="grid min-h-[680px] lg:grid-cols-[280px_1fr]">
-          {/* Mobile filter toggle bar */}
-          <div className="flex items-center justify-between border-b border-white/8 bg-[var(--color-surface)] px-4 py-3 lg:hidden">
-            <button
-              type="button"
-              onClick={() => setMobileFiltersOpen(true)}
-              className="flex items-center gap-2 rounded-lg border border-white/10 bg-[var(--color-panel)] px-3 py-2 text-sm text-[var(--color-text)]"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
-              Шүүлт
-              {(selectedMakes.length + selectedSeatBuckets.length + selectedTransmissions.length) > 0 && (
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-gold)] text-[10px] font-bold text-[var(--color-ink)]">
-                  {selectedMakes.length + selectedSeatBuckets.length + selectedTransmissions.length}
-                </span>
-              )}
-            </button>
-            <span className="text-xs text-[var(--color-muted)]">{filteredCars.length} машин</span>
-          </div>
-
-          {/* Mobile filter drawer overlay */}
-          {mobileFiltersOpen && (
-            <div className="fixed inset-0 z-50 lg:hidden" onClick={() => setMobileFiltersOpen(false)}>
-              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-              <div
-                className="absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto rounded-t-[24px] border-t border-white/8 bg-[var(--color-surface)] p-5"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="mb-1 flex justify-center"><div className="h-1 w-10 rounded-full bg-white/20" /></div>
-                <div className="mb-5 mt-3 flex items-center justify-between">
-                  <h2 className="font-display text-sm font-bold">Шүүлт</h2>
-                  <div className="flex items-center gap-3">
-                    <button type="button" onClick={resetFilters} className="text-xs text-[var(--color-gold)]">Цэвэрлэх</button>
-                    <button type="button" onClick={() => setMobileFiltersOpen(false)} className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-[var(--color-muted)]">Хаах</button>
-                  </div>
-                </div>
-                <FilterContent
-                  availableMakes={availableMakes}
-                  availableSeatBuckets={availableSeatBuckets}
-                  availableTransmissions={availableTransmissions}
-                  bookingCars={bookingCars}
-                  selectedMakes={selectedMakes}
-                  selectedSeatBuckets={selectedSeatBuckets}
-                  selectedTransmissions={selectedTransmissions}
-                  priceMax={priceMax}
-                  toggleValue={toggleValue}
-                  setSelectedMakes={setSelectedMakes}
-                  setSelectedSeatBuckets={setSelectedSeatBuckets}
-                  setSelectedTransmissions={setSelectedTransmissions}
-                  setPriceMax={setPriceMax}
-                />
-                <button
-                  type="button"
-                  onClick={() => setMobileFiltersOpen(false)}
-                  className="mt-5 w-full rounded-xl bg-[var(--color-gold)] py-3 text-sm font-medium text-[var(--color-ink)]"
-                >
-                  {filteredCars.length} машин харах
-                </button>
-              </div>
-            </div>
-          )}
-
-          <aside className="hidden border-r border-white/8 bg-[var(--color-surface)] p-6 lg:block">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="font-display text-sm font-bold">Шүүлт</h2>
-              <button
-                type="button"
-                onClick={resetFilters}
-                className="text-xs text-[var(--color-gold)]"
-              >
-                Цэвэрлэх
-              </button>
-            </div>
-
-            <FilterContent
-              availableMakes={availableMakes}
-              availableSeatBuckets={availableSeatBuckets}
-              availableTransmissions={availableTransmissions}
-              bookingCars={bookingCars}
-              selectedMakes={selectedMakes}
-              selectedSeatBuckets={selectedSeatBuckets}
-              selectedTransmissions={selectedTransmissions}
-              priceMax={priceMax}
-              toggleValue={toggleValue}
-              setSelectedMakes={setSelectedMakes}
-              setSelectedSeatBuckets={setSelectedSeatBuckets}
-              setSelectedTransmissions={setSelectedTransmissions}
-              setPriceMax={setPriceMax}
-            />
-          </aside>
-
-          <div className="p-6">
-            <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-[var(--color-muted)]">
-                <strong className="font-medium text-[var(--color-text)]">
-                  {filteredCars.length}
-                </strong>{" "}
-                машин олдлоо
-                {searchStart && searchEnd
-                  ? ` · ${searchStart} → ${searchEnd}`
-                  : ""}
-              </p>
-              <select
-                value={sortOrder}
-                onChange={(event) => setSortOrder(event.target.value)}
-                className="w-fit rounded-lg border border-white/8 bg-[var(--color-panel)] px-3 py-2 text-xs text-[var(--color-muted)] outline-none"
-              >
-                <option>Үнэ: бага → их</option>
-                <option>Үнэ: их → бага</option>
-                <option>Үнэлгээгээр</option>
-                <option>Шинэ нэмэгдсэн</option>
-              </select>
-            </div>
-
-            <div className="space-y-4">
+        <section className="p-4 sm:p-6">
+          <div className="space-y-4">
               {filteredCars.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-white/10 bg-[var(--color-panel)] p-8 text-sm text-[var(--color-muted)]">
                   Энэ шүүлтээр машин олдсонгүй. Шүүлтээ багасгаад дахин оролдоно
@@ -884,9 +542,9 @@ export const BookingExperience = ({
                   </article>
                 );
               })}
-            </div>
+          </div>
 
-            <section className="mt-10 rounded-[24px] border border-white/8 bg-[var(--color-surface)] p-5">
+          <section className="mt-10 rounded-[24px] border border-white/8 bg-[var(--color-surface)] p-5">
               <div className="mb-4 flex items-center justify-between gap-4">
                 <div>
                   <div className="font-display text-lg font-bold">
@@ -1050,8 +708,7 @@ export const BookingExperience = ({
                   })}
                 </div>
               )}
-            </section>
-          </div>
+          </section>
         </section>
       </div>
 

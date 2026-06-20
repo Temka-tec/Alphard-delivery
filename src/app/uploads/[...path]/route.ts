@@ -14,7 +14,7 @@ const mimeTypes: Record<string, string> = {
 
 export async function GET(
   _req: Request,
-  { params }: RouteContext<"/api/uploads/[...path]">,
+  { params }: RouteContext<"/uploads/[...path]">,
 ) {
   const segments = (await params).path;
 

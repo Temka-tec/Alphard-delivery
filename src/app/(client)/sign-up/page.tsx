@@ -4,6 +4,42 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
+function EyeIcon({ open }: { open: boolean }) {
+  return open ? (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  ) : (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+      <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+      <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+      <line x1="2" x2="22" y1="2" y2="22" />
+    </svg>
+  );
+}
+
 function SignUpForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -11,11 +47,12 @@ function SignUpForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: { preventDefault(): void }) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
@@ -88,14 +125,24 @@ function SignUpForm() {
           <label className="mb-1.5 block text-xs text-[var(--color-muted)]">
             Нууц үг
           </label>
-          <input
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Хамгийн багадаа 6 тэмдэгт"
-            className="w-full rounded-xl border border-white/8 bg-[var(--color-panel)] px-4 py-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-1 focus:ring-[rgba(201,168,76,0.4)]"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Хамгийн багадаа 6 тэмдэгт"
+              className="w-full rounded-xl border border-white/8 bg-[var(--color-panel)] px-4 py-3 pr-11 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-1 focus:ring-[rgba(201,168,76,0.4)]"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-muted)] transition hover:text-[var(--color-text)]"
+              tabIndex={-1}
+            >
+              <EyeIcon open={showPassword} />
+            </button>
+          </div>
         </div>
 
         {error ? (
@@ -158,7 +205,11 @@ export default function SignUpPage() {
         </section>
 
         <section className="flex items-center justify-center p-6 sm:p-8">
-          <Suspense fallback={<div className="w-full max-w-md animate-pulse rounded-[28px] border border-white/8 bg-[var(--color-surface)] p-8 h-64" />}>
+          <Suspense
+            fallback={
+              <div className="h-64 w-full max-w-md animate-pulse rounded-[28px] border border-white/8 bg-[var(--color-surface)] p-8" />
+            }
+          >
             <SignUpForm />
           </Suspense>
         </section>

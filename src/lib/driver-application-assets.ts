@@ -1,8 +1,8 @@
 export const driverApplicationUploadUrlPrefix =
-  "/api/uploads/driver-applications";
+  "/uploads/driver-applications";
 
 export const legacyDriverApplicationUploadUrlPrefix =
-  "/uploads/driver-applications";
+  "/api/uploads/driver-applications";
 
 export const isDriverApplicationUploadUrl = (
   value: string | null | undefined,

@@ -56,7 +56,8 @@ export const ModelName = {
   Car: 'Car',
   Booking: 'Booking',
   Review: 'Review',
-  DriverApplication: 'DriverApplication'
+  DriverApplication: 'DriverApplication',
+  PasswordResetToken: 'PasswordResetToken'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -201,6 +202,18 @@ export const DriverApplicationScalarFieldEnum = {
 } as const
 
 export type DriverApplicationScalarFieldEnum = (typeof DriverApplicationScalarFieldEnum)[keyof typeof DriverApplicationScalarFieldEnum]
+
+
+export const PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  code: 'code',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
 
 
 export const SortOrder = {

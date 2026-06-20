@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import {
@@ -19,6 +20,9 @@ type CarDetailSidebarProps = {
     reviewCount: number;
     badge: string;
     driver: {
+      id: string | null;
+      name: string;
+      photoUrl: string | null;
       phone: string;
     };
   };
@@ -160,26 +164,50 @@ export function CarDetailSidebar({
           <div className="mb-2 text-xs uppercase tracking-[0.08em] text-[var(--color-muted)]">
             Дэлгэрэнгүй
           </div>
-          <div className="flex items-center justify-between gap-3">
-            {car.driver.phone === "Утас удахгүй" ? (
-              <div className="text-base font-semibold text-[var(--color-muted)]">
-                {car.driver.phone}
+          <div className="flex items-center gap-3">
+            <div className="flex h-14 w-14 shrink-0 overflow-hidden rounded-full border border-[rgba(201,168,76,0.22)] bg-[rgba(201,168,76,0.12)]">
+              {car.driver.photoUrl ? (
+                <Image
+                  src={car.driver.photoUrl}
+                  alt={car.driver.name}
+                  width={56}
+                  height={56}
+                  className="h-full w-full object-cover"
+                  unoptimized
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center font-display text-lg font-bold text-[var(--color-gold)]">
+                  {car.driver.name.charAt(0)}
+                </div>
+              )}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[11px] uppercase tracking-[0.08em] text-[var(--color-muted)]">
+                Жолооч
               </div>
-            ) : (
-              <>
+              <div className="mt-1 truncate text-sm font-semibold text-[var(--color-text)]">
+                {car.driver.name}
+              </div>
+              {car.driver.phone === "Утас удахгүй" ? (
+                <div className="mt-1 text-sm text-[var(--color-muted)]">
+                  {car.driver.phone}
+                </div>
+              ) : (
                 <a
                   href={`tel:${car.driver.phone.replaceAll(" ", "")}`}
-                  className="text-base font-semibold text-[#3ECF8E] transition hover:underline"
+                  className="mt-1 inline-flex text-sm font-medium text-[#3ECF8E] transition hover:underline"
                 >
                   {car.driver.phone}
                 </a>
-                <a
-                  href={`tel:${car.driver.phone.replaceAll(" ", "")}`}
-                  className="rounded-lg border border-[rgba(62,207,142,0.35)] bg-[rgba(62,207,142,0.12)] px-3 py-2 text-sm text-[#3ECF8E]"
-                >
-                  Залгах
-                </a>
-              </>
+              )}
+            </div>
+            {car.driver.phone === "Утас удахгүй" ? null : (
+              <a
+                href={`tel:${car.driver.phone.replaceAll(" ", "")}`}
+                className="shrink-0 rounded-lg border border-[rgba(62,207,142,0.35)] bg-[rgba(62,207,142,0.12)] px-3 py-2 text-sm text-[#3ECF8E]"
+              >
+                Залгах
+              </a>
             )}
           </div>
         </div>

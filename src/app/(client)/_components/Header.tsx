@@ -10,6 +10,9 @@ export const Header = async () => {
       isAdmin={viewer.isAdmin}
       isSignedIn={viewer.isSignedIn}
       displayName={viewer.displayName}
+      displayEmail={viewer.displayEmail}
+      isDriver={viewer.isDriver}
+      hasDriverApplication={viewer.hasDriverApplication}
     />
   );
 };

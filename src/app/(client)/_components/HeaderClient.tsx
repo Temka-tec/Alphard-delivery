@@ -2,8 +2,15 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import {
+  ChevronDown,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  UserCircle2,
+  X,
+} from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useRipple } from "@/hooks/use-ripple";
 import { navItems } from "./landing-data";
@@ -12,13 +19,25 @@ type HeaderClientProps = {
   isAdmin: boolean;
   isSignedIn: boolean;
   displayName: string | null;
+  displayEmail: string | null;
+  isDriver: boolean;
+  hasDriverApplication: boolean;
 };
 
-export const HeaderClient = ({ isAdmin, isSignedIn, displayName }: HeaderClientProps) => {
+export const HeaderClient = ({
+  isAdmin,
+  isSignedIn,
+  displayName,
+  displayEmail,
+  isDriver,
+  hasDriverApplication,
+}: HeaderClientProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const ripple = useRipple();
+  const profileMenuRef = useRef<HTMLDivElement | null>(null);
 
   const isNavActive = (href: string) => {
     if (href.startsWith("#")) {
@@ -32,6 +51,49 @@ export const HeaderClient = ({ isAdmin, isSignedIn, displayName }: HeaderClientP
     router.push("/");
     router.refresh();
   };
+
+  const showDriverOverview = isDriver || hasDriverApplication;
+  const primaryAccountHref = showDriverOverview ? "/driver/dashboard" : "/driver/profile";
+  const primaryAccountLabel = isDriver
+    ? "Dashboard"
+    : showDriverOverview
+      ? "Хүсэлтийн самбар"
+      : "Профайл";
+  const secondaryAccountHref = showDriverOverview ? "/driver/profile" : "/driver/register";
+  const secondaryAccountLabel = showDriverOverview ? "Жолоочийн мэдээлэл" : "Жолооч болох";
+  const statusLabel = isAdmin
+    ? "Админ"
+    : isDriver
+      ? "Жолооч"
+      : hasDriverApplication
+        ? "Хүсэлт илгээсэн"
+        : "Хэрэглэгч";
+
+  useEffect(() => {
+    const onPointerDown = (event: MouseEvent | PointerEvent) => {
+      if (
+        profileMenuRef.current &&
+        event.target instanceof Node &&
+        !profileMenuRef.current.contains(event.target)
+      ) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsProfileOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onEscape);
+
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onEscape);
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-30 border-b border-[var(--color-text)]/8 bg-[var(--color-header-bg)] backdrop-blur">
@@ -115,14 +177,117 @@ export const HeaderClient = ({ isAdmin, isSignedIn, displayName }: HeaderClientP
                 >
                   Захиалах
                 </button>
-                <button
-                  type="button"
-                  onClick={handleSignOut}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(201,168,76,0.3)] bg-[rgba(201,168,76,0.1)] text-sm font-semibold text-[var(--color-gold)] ring-1 ring-[rgba(201,168,76,0.3)]"
-                  title={displayName ?? "Гарах"}
-                >
-                  {displayName?.slice(0, 1)?.toUpperCase() ?? "U"}
-                </button>
+
+                <div className="relative" ref={profileMenuRef}>
+                  <button
+                    type="button"
+                    onClick={() => setIsProfileOpen((current) => !current)}
+                    className="flex h-11 items-center gap-3 rounded-full border border-[rgba(201,168,76,0.24)] bg-[rgba(201,168,76,0.08)] px-2.5 py-1.5 text-left transition hover:bg-[rgba(201,168,76,0.12)]"
+                    aria-haspopup="menu"
+                    aria-expanded={isProfileOpen}
+                    title={displayName ?? "Профайл"}
+                  >
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[rgba(201,168,76,0.18)] text-sm font-semibold text-[var(--color-gold)] ring-1 ring-[rgba(201,168,76,0.25)]">
+                      {displayName?.slice(0, 1)?.toUpperCase() ?? "U"}
+                    </span>
+                    <span className="hidden max-w-32 flex-col leading-tight xl:flex">
+                      <span className="truncate text-sm font-medium text-[var(--color-text)]">
+                        {displayName ?? "Профайл"}
+                      </span>
+                      <span className="truncate text-xs text-[var(--color-muted)]">
+                        {statusLabel}
+                      </span>
+                    </span>
+                    <ChevronDown
+                      size={16}
+                      className={[
+                        "text-[var(--color-muted)] transition",
+                        isProfileOpen ? "rotate-180" : "",
+                      ].join(" ")}
+                    />
+                  </button>
+
+                  {isProfileOpen ? (
+                    <div
+                      role="menu"
+                      aria-label="Account menu"
+                      className="absolute right-0 top-[calc(100%+0.75rem)] w-80 overflow-hidden rounded-2xl border border-[var(--color-text)]/10 bg-[var(--color-surface)] shadow-[0_24px_80px_rgba(0,0,0,0.22)]"
+                    >
+                      <div className="border-b border-[var(--color-text)]/8 px-4 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[rgba(201,168,76,0.14)] text-base font-semibold text-[var(--color-gold)] ring-1 ring-[rgba(201,168,76,0.24)]">
+                            {displayName?.slice(0, 1)?.toUpperCase() ?? "U"}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="truncate font-medium text-[var(--color-text)]">
+                              {displayName ?? "Хэрэглэгч"}
+                            </div>
+                            <div className="truncate text-sm text-[var(--color-muted)]">
+                              {displayEmail ?? "И-мэйл байхгүй"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-3 inline-flex rounded-full border border-[rgba(201,168,76,0.24)] bg-[rgba(201,168,76,0.08)] px-3 py-1 text-xs text-[var(--color-gold)]">
+                          {statusLabel}
+                        </div>
+                      </div>
+
+                      <div className="p-2">
+                        <Link
+                          href="/driver/profile"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--color-text)] transition hover:bg-[var(--color-panel)]"
+                          role="menuitem"
+                        >
+                          <UserCircle2 size={16} className="text-[var(--color-muted)]" />
+                          Профайл
+                        </Link>
+                        {showDriverOverview ? (
+                          <Link
+                            href={primaryAccountHref}
+                            onClick={() => setIsProfileOpen(false)}
+                            className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--color-text)] transition hover:bg-[var(--color-panel)]"
+                            role="menuitem"
+                          >
+                            <LayoutDashboard size={16} className="text-[var(--color-muted)]" />
+                            {primaryAccountLabel}
+                          </Link>
+                        ) : null}
+                        {isAdmin ? (
+                          <Link
+                            href="/admin/driver-applications"
+                            onClick={() => setIsProfileOpen(false)}
+                            className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--color-gold)] transition hover:bg-[var(--color-panel)]"
+                            role="menuitem"
+                          >
+                            <UserCircle2 size={16} />
+                            Админ хэсэг
+                          </Link>
+                        ) : null}
+                        <Link
+                          href={secondaryAccountHref}
+                          onClick={() => setIsProfileOpen(false)}
+                          className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--color-muted)] transition hover:bg-[var(--color-panel)] hover:text-[var(--color-text)]"
+                          role="menuitem"
+                        >
+                          {secondaryAccountLabel}
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsProfileOpen(false);
+                            void handleSignOut();
+                          }}
+                          className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm text-[#F87171] transition hover:bg-[rgba(248,113,113,0.08)]"
+                          role="menuitem"
+                        >
+                          <LogOut size={16} />
+                          Гарах
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
               </>
             )}
           </div>
@@ -142,6 +307,27 @@ export const HeaderClient = ({ isAdmin, isSignedIn, displayName }: HeaderClientP
 
         {isMenuOpen ? (
           <div className="fade-in-up mt-4 rounded-2xl border border-[var(--color-text)]/8 bg-[var(--color-surface)] p-4 md:hidden">
+            {isSignedIn ? (
+              <div className="mb-4 rounded-2xl border border-[rgba(201,168,76,0.14)] bg-[rgba(201,168,76,0.06)] p-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[rgba(201,168,76,0.16)] text-sm font-semibold text-[var(--color-gold)]">
+                    {displayName?.slice(0, 1)?.toUpperCase() ?? "U"}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="truncate font-medium text-[var(--color-text)]">
+                      {displayName ?? "Хэрэглэгч"}
+                    </div>
+                    <div className="truncate text-xs text-[var(--color-muted)]">
+                      {displayEmail ?? "И-мэйл байхгүй"}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-3 inline-flex rounded-full border border-[rgba(201,168,76,0.22)] bg-[rgba(201,168,76,0.08)] px-3 py-1 text-xs text-[var(--color-gold)]">
+                  {statusLabel}
+                </div>
+              </div>
+            ) : null}
+
             <nav className="flex flex-col gap-2">
               {navItems.map((item) => (
                 <a
@@ -194,6 +380,29 @@ export const HeaderClient = ({ isAdmin, isSignedIn, displayName }: HeaderClientP
                     </Link>
                   ) : null}
                   <Link
+                    href="/driver/profile"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="rounded-lg px-3 py-2 text-sm text-[var(--color-muted)] transition hover:bg-[var(--color-panel)] hover:text-[var(--color-gold)]"
+                  >
+                    Профайл
+                  </Link>
+                  {showDriverOverview ? (
+                    <Link
+                      href={primaryAccountHref}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="rounded-lg px-3 py-2 text-sm text-[var(--color-muted)] transition hover:bg-[var(--color-panel)] hover:text-[var(--color-gold)]"
+                    >
+                      {primaryAccountLabel}
+                    </Link>
+                  ) : null}
+                  <Link
+                    href={secondaryAccountHref}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="rounded-lg px-3 py-2 text-sm text-[var(--color-muted)] transition hover:bg-[var(--color-panel)] hover:text-[var(--color-gold)]"
+                  >
+                    {secondaryAccountLabel}
+                  </Link>
+                  <Link
                     href="/booking"
                     onClick={() => setIsMenuOpen(false)}
                     className="btn-shine rounded-lg bg-[var(--color-gold)] px-4 py-3 text-center text-sm font-medium text-[var(--color-ink)]"
@@ -206,7 +415,7 @@ export const HeaderClient = ({ isAdmin, isSignedIn, displayName }: HeaderClientP
                       setIsMenuOpen(false);
                       void handleSignOut();
                     }}
-                    className="rounded-lg border border-[var(--color-text)]/10 px-4 py-3 text-center text-sm text-[var(--color-muted)] transition hover:bg-[var(--color-panel)]"
+                    className="rounded-lg border border-[rgba(248,113,113,0.18)] px-4 py-3 text-center text-sm text-[#F87171] transition hover:bg-[rgba(248,113,113,0.08)]"
                   >
                     Гарах
                   </button>
