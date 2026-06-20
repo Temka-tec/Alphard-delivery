@@ -1,4 +1,5 @@
 import { getAvailableCars } from "@/lib/car-data";
+import { isDriverApplicationUploadUrl } from "@/lib/driver-application-assets";
 import { getCurrentViewer } from "@/lib/current-viewer";
 import { prisma } from "@/lib/prisma";
 import { BookingExperience } from "./_components/BookingExperience";
@@ -51,7 +52,10 @@ export default async function BookingPage() {
         car: {
           name: `${booking.car.make} ${booking.car.model}`,
           slug: booking.car.slug,
-          heroImage: booking.car.photos.find((photo) => photo.startsWith("/uploads/")) || null,
+          heroImage:
+            booking.car.photos.find((photo) =>
+              isDriverApplicationUploadUrl(photo),
+            ) || null,
         },
         driver: {
           name: booking.driver.user.name || "Жолооч",

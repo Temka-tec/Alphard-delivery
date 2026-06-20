@@ -2,6 +2,7 @@ import "server-only";
 
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
+import { isDriverApplicationUploadUrl } from "@/lib/driver-application-assets";
 
 export type CarListItem = {
   id: string;
@@ -55,7 +56,7 @@ export type CarDetailsItem = CarListItem & {
 const formatPriceLabel = (value: number) => `₮${value.toLocaleString()}`;
 
 const isStoredImagePath = (value: string | null | undefined): value is string =>
-  Boolean(value?.startsWith("/uploads/"));
+  isDriverApplicationUploadUrl(value);
 
 const titleCase = (value: string) =>
   value

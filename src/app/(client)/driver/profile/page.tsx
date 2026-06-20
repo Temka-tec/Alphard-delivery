@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -34,6 +35,8 @@ export default async function DriverProfilePage() {
   const displayName = viewer.displayName || "Хэрэглэгч";
   const application = viewer.latestDriverApplication;
   const car = viewer.driverProfile?.car;
+  const profilePhoto =
+    viewer.driverProfile?.photoUrl || application?.profilePhotoName || null;
 
   return (
     <main className="min-h-screen bg-[var(--color-bg)] px-6 py-8 text-[var(--color-text)] sm:px-8 lg:px-10">
@@ -62,8 +65,21 @@ export default async function DriverProfilePage() {
         <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
           <aside className="rounded-[24px] border border-white/8 bg-[var(--color-surface)] p-5">
             <div className="flex flex-col items-center text-center">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.12)] font-display text-2xl font-bold text-[var(--color-gold)]">
-                {displayName.charAt(0)}
+              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.12)]">
+                {profilePhoto ? (
+                  <Image
+                    src={profilePhoto}
+                    alt={displayName}
+                    width={80}
+                    height={80}
+                    className="h-full w-full object-cover"
+                    unoptimized
+                  />
+                ) : (
+                  <span className="font-display text-2xl font-bold text-[var(--color-gold)]">
+                    {displayName.charAt(0)}
+                  </span>
+                )}
               </div>
               <div className="mt-4 font-display text-2xl font-bold">{displayName}</div>
               <div className="mt-1 text-sm text-[var(--color-muted)]">

@@ -5,7 +5,7 @@ import { getAvailableCars } from "@/lib/car-data";
 import { FleetCardClient } from "./FleetCardClient";
 
 const iconShellClasses =
-  "flex h-36 items-center justify-center bg-[linear-gradient(135deg,var(--color-panel),var(--color-surface))]";
+  "flex items-center justify-center bg-[linear-gradient(135deg,var(--color-panel),var(--color-surface))]";
 
 export const FleetSection = async () => {
   const viewer = await getCurrentViewer();
@@ -13,7 +13,7 @@ export const FleetSection = async () => {
   const cars = await getAvailableCars(6, viewer.user?.id ?? null);
 
   return (
-    <section id="cars" className="px-4 py-14 sm:px-6 lg:px-10">
+    <section id="cars" className="px-3 py-14 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div className="font-display text-2xl font-bold tracking-[-0.04em] text-[var(--color-text)] sm:text-3xl">
@@ -29,28 +29,28 @@ export const FleetSection = async () => {
           </a>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-2 xl:grid-cols-3">
           {cars.length === 0 ? (
-            <div className="rounded-[20px] border border-[var(--color-text)]/8 bg-[var(--color-surface)] p-8 text-sm text-[var(--color-muted)] md:col-span-2 xl:col-span-3">
+            <div className="col-span-2 rounded-[20px] border border-[var(--color-text)]/8 bg-[var(--color-surface)] p-8 text-sm text-[var(--color-muted)] md:col-span-2 xl:col-span-3">
               Одоогоор сул машин бүртгэгдээгүй байна.
             </div>
           ) : null}
 
           {cars.map((car, index) => (
             <FleetCardClient key={car.id ?? car.slug ?? `${car.name}-${index}`}>
-              <article className="card-lift card-glow overflow-hidden rounded-[20px] border border-[var(--color-text)]/8 bg-[var(--color-surface)] hover:border-[rgba(201,168,76,0.25)]">
-                <div className={`${iconShellClasses} relative`}>
+              <article className="card-lift card-glow relative aspect-[1.04] overflow-hidden rounded-[18px] border border-[var(--color-text)]/8 bg-[var(--color-surface)] hover:border-[rgba(201,168,76,0.25)] sm:aspect-auto">
+                <div className={`${iconShellClasses} absolute inset-0 sm:relative sm:aspect-[16/10]`}>
                   {car.heroImage ? (
                     <Image
                       src={car.heroImage}
                       alt={car.name}
                       fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1280px) 50vw, 33vw"
                       className="object-cover"
                       unoptimized
                     />
                   ) : (
-                    <div className="font-display text-4xl font-extrabold tracking-[0.12em] text-white/80">
+                    <div className="font-display text-3xl font-extrabold tracking-[0.12em] text-white/80 sm:text-4xl">
                       {car.icon}
                     </div>
                   )}
@@ -58,13 +58,21 @@ export const FleetSection = async () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
 
                   <div
-                    className={`absolute right-3 top-3 rounded-md px-2.5 py-1 text-[10px] tracking-[0.04em] ${car.badgeClassName}`}
+                    className={`absolute right-2 top-2 rounded-md px-2 py-1 text-[9px] tracking-[0.04em] sm:right-3 sm:top-3 sm:px-2.5 sm:text-[10px] ${car.badgeClassName}`}
                   >
                     {car.badge}
                   </div>
+
+                  <div className="absolute inset-x-0 top-0 flex justify-center px-3 pt-10 sm:hidden">
+                    <h3 className="max-w-full truncate font-display text-lg font-bold tracking-[-0.03em] text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.55)]">
+                      {car.name}
+                    </h3>
+                  </div>
+
+                  <div className="absolute bottom-2 right-2 h-5 w-5 rounded-br-[12px] border-b-4 border-r-4 border-[rgba(32,32,32,0.92)] sm:hidden" />
                 </div>
 
-                <div className="p-5">
+                <div className="hidden p-5 sm:block">
                   <h3 className="font-display text-lg font-bold text-[var(--color-text)]">
                     {car.name}
                   </h3>

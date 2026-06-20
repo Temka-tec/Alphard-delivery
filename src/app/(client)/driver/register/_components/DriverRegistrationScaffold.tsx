@@ -13,10 +13,10 @@ export const DriverRegistrationScaffold = ({
 }: DriverRegistrationScaffoldProps) => {
   return (
     <>
-      <div className="mb-8 flex items-center justify-between gap-4">
+      <div className="mb-6 flex flex-col gap-3 sm:mb-8 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <Link
           href="/"
-          className="font-display text-2xl font-extrabold tracking-[-0.04em]"
+          className="font-display text-xl font-extrabold tracking-[-0.04em] sm:text-2xl"
         >
           ALPHARD<span className="text-[var(--color-gold)]">.</span>
         </Link>
@@ -28,7 +28,7 @@ export const DriverRegistrationScaffold = ({
         </Link>
       </div>
 
-      <div className="mb-12 grid grid-cols-4 gap-1.5 sm:gap-3">
+      <div className="mb-10 grid grid-cols-4 gap-1 sm:mb-12 sm:gap-3">
         {[
           { label: "Хэрэглэгч", status: "done", mark: "✓" },
           {
@@ -52,15 +52,15 @@ export const DriverRegistrationScaffold = ({
           <div key={step.label} className="relative flex flex-col items-center">
             {index < 3 ? (
               <div
-                className={`absolute left-1/2 top-[18px] h-px w-full ${
-                  step.status === "done"
-                    ? "bg-[var(--color-gold-dark)]"
-                    : "bg-white/8"
-                }`}
-              />
-            ) : null}
-            <div
-              className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full border text-xs font-bold sm:h-9 sm:w-9 sm:text-sm ${
+              className={`absolute left-1/2 top-[15px] h-px w-full ${
+                step.status === "done"
+                  ? "bg-[var(--color-gold-dark)]"
+                  : "bg-white/8"
+              }`}
+            />
+          ) : null}
+          <div
+              className={`relative z-10 flex h-7 w-7 items-center justify-center rounded-full border text-[10px] font-bold sm:h-9 sm:w-9 sm:text-sm ${
                 step.status === "done"
                   ? "border-[var(--color-gold)] bg-[var(--color-gold)] text-[var(--color-ink)]"
                   : step.status === "active"
@@ -71,7 +71,7 @@ export const DriverRegistrationScaffold = ({
               {step.mark}
             </div>
             <span
-              className={`mt-1.5 text-center text-[10px] sm:mt-2 sm:text-[11px] ${
+              className={`mt-1.5 text-center text-[9px] leading-tight sm:mt-2 sm:text-[11px] ${
                 step.status === "active"
                   ? "text-[var(--color-gold)]"
                   : "text-[var(--color-muted)]"
@@ -83,12 +83,12 @@ export const DriverRegistrationScaffold = ({
         ))}
       </div>
 
-      <div className="mb-10">
+      <div className="mb-8 sm:mb-10">
         <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.08)] px-3 py-1 text-xs text-[var(--color-gold)]">
           <span>👨‍✈️</span>
           <span>Алхам {activeStep + 1} / 4</span>
         </div>
-        <h1 className="font-display text-4xl font-extrabold tracking-[-0.04em]">
+        <h1 className="font-display text-3xl font-extrabold tracking-[-0.04em] sm:text-4xl">
           {activeStep === 1
             ? "Жолоочийн "
             : activeStep === 2

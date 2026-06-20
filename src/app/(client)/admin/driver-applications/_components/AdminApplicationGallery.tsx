@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { isDriverApplicationUploadUrl } from "@/lib/driver-application-assets";
 
 type GalleryImage = {
   key: string;
@@ -18,7 +19,7 @@ type AdminApplicationGalleryProps = {
 };
 
 const isStoredImagePath = (value: string | null | undefined) =>
-  Boolean(value?.startsWith("/uploads/"));
+  isDriverApplicationUploadUrl(value);
 
 export const AdminApplicationGallery = ({
   carMake,

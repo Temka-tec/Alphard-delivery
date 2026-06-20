@@ -35,20 +35,20 @@ export const DriverRegistrationDialog = ({
 
       {isOpen ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4"
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 px-3 py-3 sm:items-center sm:px-4 sm:py-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="driver-registration-dialog-title"
         >
-          <div className="w-full max-w-md rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,var(--color-surface),var(--color-panel))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+          <div className="max-h-[90svh] w-full max-w-md overflow-y-auto rounded-t-[28px] border border-white/10 bg-[linear-gradient(180deg,var(--color-surface),var(--color-panel))] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.45)] sm:rounded-[28px] sm:p-6">
             <div className="flex items-start justify-between gap-4">
-              <div>
+              <div className="min-w-0">
                 <div className="inline-flex rounded-full border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.08)] px-3 py-1 text-xs text-[var(--color-gold)]">
                   Жолоочийн хүсэлт
                 </div>
                 <h2
                   id="driver-registration-dialog-title"
-                  className="mt-4 font-display text-2xl font-extrabold tracking-[-0.04em] text-[var(--color-text)]"
+                  className="mt-3 font-display text-xl font-extrabold tracking-[-0.04em] text-[var(--color-text)] sm:mt-4 sm:text-2xl"
                 >
                   Эхлээд хэрэглэгчээр нэвтэрч үргэлжлүүлнэ
                 </h2>
@@ -64,13 +64,13 @@ export const DriverRegistrationDialog = ({
               </button>
             </div>
 
-            <p className="mt-4 text-sm leading-7 text-[var(--color-muted)]">
+            <p className="mt-3 text-sm leading-7 text-[var(--color-muted)] sm:mt-4">
               Жолоочийн хүсэлт гаргахын өмнө хэрэглэгчийн бүртгэлтэй байх
               шаардлагатай. Доорх сонголтоос нэгийг хийгээд шууд хүсэлтийн форм
               руу орно.
             </p>
 
-            <div className="mt-6 grid gap-3">
+            <div className="mt-5 grid gap-3 sm:mt-6">
               <button
                 type="button"
                 onClick={() =>

@@ -13,7 +13,7 @@ export const HeroSection = async () => {
     !viewer.hasDriverApplication;
 
   return (
-    <section className="relative overflow-hidden border-b border-[var(--color-text)]/8 bg-[linear-gradient(135deg,var(--color-bg)_0%,var(--color-panel)_50%,var(--color-bg)_100%)] px-4 py-16 sm:px-6 lg:px-10 lg:py-28">
+    <section className="relative overflow-hidden border-b border-[var(--color-text)]/8 bg-[linear-gradient(135deg,var(--color-bg)_0%,var(--color-panel)_50%,var(--color-bg)_100%)] px-3 py-12 sm:px-6 lg:px-10 lg:py-28">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(201,168,76,0.08)_0%,transparent_70%)]" />
 
       <div className="relative mx-auto max-w-5xl text-center">
@@ -33,51 +33,51 @@ export const HeroSection = async () => {
           аялаарай. Захиалга хялбар, аюулгүй, найдвартай.
         </p>
 
-        <div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+        <div className="mt-8 grid grid-cols-2 gap-2 sm:mt-10 sm:flex sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
           {viewer.isAdmin ? (
             <Link
               href="/admin/driver-applications"
-              className="rounded-xl border border-[rgba(201,168,76,0.4)] px-6 py-4 text-center text-sm font-medium text-[var(--color-gold)] transition hover:-translate-y-0.5 hover:bg-[rgba(201,168,76,0.08)] sm:px-8"
+              className="rounded-xl border border-[rgba(201,168,76,0.4)] px-3 py-3 text-center text-xs font-medium text-[var(--color-gold)] transition hover:-translate-y-0.5 hover:bg-[rgba(201,168,76,0.08)] sm:px-6 sm:py-4 sm:text-sm"
             >
               Админ хэсэг рүү
             </Link>
           ) : null}
           <Link
             href="/booking"
-            className="rounded-xl bg-[var(--color-gold)] px-6 py-4 text-center text-sm font-medium text-[var(--color-ink)] transition hover:-translate-y-0.5 hover:bg-[var(--color-gold-light)] sm:px-8"
+            className="rounded-xl bg-[var(--color-gold)] px-3 py-3 text-center text-xs font-medium text-[var(--color-ink)] transition hover:-translate-y-0.5 hover:bg-[var(--color-gold-light)] sm:px-6 sm:py-4 sm:text-sm"
           >
             Машин захиалах →
           </Link>
           {viewer.isDriver ? (
             <Link
               href="/driver/profile"
-              className="rounded-xl border border-white/15 px-6 py-4 text-center text-sm font-medium text-[var(--color-text)] transition hover:border-[rgba(201,168,76,0.4)] hover:text-[var(--color-gold)] sm:px-8"
+              className="rounded-xl border border-white/15 px-3 py-3 text-center text-xs font-medium text-[var(--color-text)] transition hover:border-[rgba(201,168,76,0.4)] hover:text-[var(--color-gold)] sm:px-6 sm:py-4 sm:text-sm"
             >
               Жолоочийн профайл
             </Link>
           ) : viewer.hasDriverApplication ? (
             <Link
               href="/driver/dashboard"
-              className="rounded-xl border border-white/15 px-6 py-4 text-center text-sm font-medium text-[var(--color-text)] transition hover:border-[rgba(201,168,76,0.4)] hover:text-[var(--color-gold)] sm:px-8"
+              className="rounded-xl border border-white/15 px-3 py-3 text-center text-xs font-medium text-[var(--color-text)] transition hover:border-[rgba(201,168,76,0.4)] hover:text-[var(--color-gold)] sm:px-6 sm:py-4 sm:text-sm"
             >
               Хүсэлтийн төлөв
             </Link>
           ) : canApplyAsDriver ? (
             <DriverRegistrationDialog
               label="Жолоочийн хүсэлт өгөх"
-              className="rounded-xl border border-white/15 px-6 py-4 text-center text-sm font-medium text-[var(--color-text)] transition hover:border-[rgba(201,168,76,0.4)] hover:text-[var(--color-gold)] sm:px-8"
+              className="rounded-xl border border-white/15 px-3 py-3 text-center text-xs font-medium text-[var(--color-text)] transition hover:border-[rgba(201,168,76,0.4)] hover:text-[var(--color-gold)] sm:px-6 sm:py-4 sm:text-sm"
               isSignedIn={viewer.isSignedIn}
             />
           ) : null}
         </div>
 
-        <div className="mt-12 grid gap-6 border-t border-white/8 pt-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid grid-cols-2 gap-4 border-t border-white/8 pt-8 sm:grid-cols-4">
           {stats.map((stat) => (
-            <div key={stat.label}>
-              <div className="font-display text-3xl font-bold text-[var(--color-gold)]">
+            <div key={stat.label} className="text-center">
+              <div className="font-display text-2xl font-bold text-[var(--color-gold)] sm:text-3xl">
                 {stat.value}
               </div>
-              <div className="mt-1 text-xs text-[var(--color-muted)]">
+              <div className="mt-1 text-[11px] text-[var(--color-muted)] sm:text-xs">
                 {stat.label}
               </div>
             </div>

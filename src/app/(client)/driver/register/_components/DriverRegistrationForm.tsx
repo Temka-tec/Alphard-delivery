@@ -199,8 +199,8 @@ export const DriverRegistrationForm = () => {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--color-bg)] px-6 py-8 text-[var(--color-text)] sm:px-8 lg:px-10">
-      <form onSubmit={handleSubmit} className="mx-auto max-w-5xl">
+    <main className="min-h-screen bg-[var(--color-bg)] px-4 py-5 text-[var(--color-text)] sm:px-8 sm:py-8 lg:px-10">
+      <form onSubmit={handleSubmit} className="mx-auto w-full max-w-5xl">
         <DriverRegistrationScaffold activeStep={activeStep}>
           <DriverRegistrationTabs
             activeStep={activeStep}

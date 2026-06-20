@@ -13,9 +13,9 @@ export const DriverCTA = async () => {
     !viewer.hasDriverApplication;
 
   return (
-    <section id="drivers" className="px-4 py-14 sm:px-6 lg:px-10">
+    <section id="drivers" className="px-3 py-14 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col gap-8 rounded-[20px] border border-[rgba(201,168,76,0.2)] bg-[linear-gradient(135deg,var(--color-surface),var(--color-panel))] p-6 sm:p-8 lg:flex-row lg:items-center lg:p-10">
+        <div className="flex flex-col gap-6 rounded-[20px] border border-[rgba(201,168,76,0.2)] bg-[linear-gradient(135deg,var(--color-surface),var(--color-panel))] p-5 sm:p-8 lg:flex-row lg:items-center lg:p-10">
           <div className="text-4xl leading-none sm:text-5xl">👨‍✈️</div>
 
           <div className="max-w-3xl">
@@ -39,32 +39,32 @@ export const DriverCTA = async () => {
               ))}
             </div>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               {viewer.isDriver ? (
                 <Link
                   href="/driver/profile"
-                  className="rounded-lg bg-(--color-gold) px-5 py-3 text-center text-sm font-medium text-(--color-ink) transition hover:bg-(--color-gold-light)"
+                  className="w-full rounded-lg bg-(--color-gold) px-5 py-3 text-center text-sm font-medium text-(--color-ink) transition hover:bg-(--color-gold-light) sm:w-auto"
                 >
                   Жолоочийн профайл
                 </Link>
               ) : viewer.hasDriverApplication ? (
                 <Link
                   href="/driver/dashboard"
-                  className="rounded-lg bg-(--color-gold) px-5 py-3 text-center text-sm font-medium text-(--color-ink) transition hover:bg-(--color-gold-light)"
+                  className="w-full rounded-lg bg-(--color-gold) px-5 py-3 text-center text-sm font-medium text-(--color-ink) transition hover:bg-(--color-gold-light) sm:w-auto"
                 >
                   Хүсэлтийн төлөв
                 </Link>
               ) : canApplyAsDriver ? (
                 <DriverRegistrationDialog
                   label="Жолоочийн хүсэлт →"
-                  className="rounded-lg bg-(--color-gold) px-5 py-3 text-center text-sm font-medium text-(--color-ink) transition hover:bg-(--color-gold-light)"
+                  className="w-full rounded-lg bg-(--color-gold) px-5 py-3 text-center text-sm font-medium text-(--color-ink) transition hover:bg-(--color-gold-light) sm:w-auto"
                   isSignedIn={viewer.isSignedIn}
                 />
               ) : null}
               {!viewer.isSignedIn ? (
                 <Link
                   href="/sign-in"
-                  className="rounded-lg border border-[rgba(201,168,76,0.4)] px-5 py-3 text-center text-sm text-(--color-gold) transition hover:bg-[rgba(201,168,76,0.1)]"
+                  className="w-full rounded-lg border border-[rgba(201,168,76,0.4)] px-5 py-3 text-center text-sm text-(--color-gold) transition hover:bg-[rgba(201,168,76,0.1)] sm:w-auto"
                 >
                   Нэвтрэх
                 </Link>
@@ -73,7 +73,7 @@ export const DriverCTA = async () => {
                   href={
                     viewer.isDriver ? "/driver/profile" : "/driver/dashboard"
                   }
-                  className="rounded-lg border border-[rgba(201,168,76,0.25)] px-5 py-3 text-center text-sm text-(--color-muted) transition hover:border-[rgba(201,168,76,0.4)] hover:text-foreground"
+                  className="w-full rounded-lg border border-[rgba(201,168,76,0.25)] px-5 py-3 text-center text-sm text-(--color-muted) transition hover:border-[rgba(201,168,76,0.4)] hover:text-foreground sm:w-auto"
                 >
                   {viewer.isDriver ? "Dashboard" : "Хүсэлтийн самбар"}
                 </Link>

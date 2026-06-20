@@ -4,13 +4,12 @@ import { useState } from "react";
 import type { ChangeEvent } from "react";
 
 import {
-  Armchair,
   Camera,
   Car,
   CheckCircle2,
   CreditCard,
   FileText,
-  Image,
+  Image as PhotoIcon,
   Info,
   Send,
   User,
@@ -65,11 +64,11 @@ const DemoButton = ({
   label: string;
   onClick: () => void;
 }) => (
-  <div className="flex justify-end md:col-span-2">
+  <div className="flex justify-start md:col-span-2 md:justify-end">
     <button
       type="button"
       onClick={onClick}
-      className="btn-ripple-effect rounded-full border border-[rgba(201,168,76,0.3)] px-4 py-2 text-xs font-medium text-[var(--color-gold)] transition hover:bg-[rgba(201,168,76,0.08)]"
+      className="btn-ripple-effect w-full rounded-full border border-[rgba(201,168,76,0.3)] px-4 py-2 text-xs font-medium text-[var(--color-gold)] transition hover:bg-[rgba(201,168,76,0.08)] sm:w-auto"
     >
       {label}
     </button>
@@ -123,6 +122,7 @@ export const PersonalInfoStep = ({
   const [openRegisterPicker, setOpenRegisterPicker] = useState<0 | 1 | null>(
     null,
   );
+  const activeRegisterPicker = openRegisterPicker ?? 0;
 
   return (
     <div className="grid gap-4 md:grid-cols-2">
@@ -148,58 +148,72 @@ export const PersonalInfoStep = ({
                 {field.label}{" "}
                 <span className="text-[var(--color-gold)]">*</span>
               </span>
-              <div className="grid gap-3 sm:grid-cols-[1fr_1fr_1.6fr]">
-                {[0, 1].map((index) => (
-                  <div key={index} className="relative">
+              <div className="relative">
+                <div className="grid grid-cols-[3.25rem_3.25rem_minmax(0,1fr)] gap-2 sm:grid-cols-[4.5rem_4.5rem_minmax(0,1fr)] sm:gap-3">
+                  {[0, 1].map((index) => (
                     <button
+                      key={index}
                       type="button"
                       onClick={() =>
                         setOpenRegisterPicker((current) =>
                           current === index ? null : (index as 0 | 1),
                         )
                       }
-                      className={`flex w-full items-center justify-between rounded-xl border bg-[var(--color-panel)] px-4 py-3 outline-none transition ${
+                      className={`flex items-center justify-between rounded-xl border bg-[var(--color-panel)] px-3 py-3 outline-none transition ${
                         openRegisterPicker === index
                           ? "border-[rgba(201,168,76,0.45)]"
                           : "border-white/8"
                       }`}
                     >
-                      <span className="text-base font-semibold">
+                      <span className="text-sm font-semibold sm:text-base">
                         {registerPrefix[index] || "А"}
                       </span>
-                      <span className="text-sm text-[var(--color-muted)]">
+                      <span className="text-[10px] text-[var(--color-muted)] sm:text-sm">
                         ▾
                       </span>
                     </button>
-                    {openRegisterPicker === index ? (
-                      <div className="absolute z-20 mt-2 grid max-h-56 min-w-[100px] w-[calc(100%+56px)] grid-cols-4 gap-2 overflow-y-auto rounded-2xl border border-white/8 bg-[#191923] p-3 shadow-2xl">
-                        {mongolianRegisterLetters.map((letter) => (
-                          <button
-                            key={`${index}-${letter}`}
-                            type="button"
-                            onClick={() => {
-                              onRegisterPrefixChange(index as 0 | 1, letter);
-                              setOpenRegisterPicker(null);
-                            }}
-                            className="rounded-xl border-2 border-[rgba(255,255,255,0.14)] bg-[var(--color-panel)] px-3 py-3 text-sm font-semibold transition hover:border-[rgba(201,168,76,0.55)] hover:text-[var(--color-gold)]"
-                          >
-                            {letter}
-                          </button>
-                        ))}
-                      </div>
-                    ) : null}
+                  ))}
+                  <input
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    placeholder="12345678"
+                    value={registerDigits}
+                    onChange={(event) =>
+                      onRegisterDigitsChange(event.target.value)
+                    }
+                    className="min-w-0 rounded-xl border border-white/8 bg-[var(--color-panel)] px-3 py-3 text-sm outline-none transition focus:border-[rgba(201,168,76,0.45)] focus:bg-[#22222E] sm:px-4"
+                  />
+                </div>
+
+                {openRegisterPicker !== null ? (
+                  <div className="absolute left-0 right-0 top-full z-20 mt-2 rounded-2xl border border-white/8 bg-[#191923] p-3 shadow-2xl">
+                    <div className="mb-3 flex items-center justify-between gap-3 text-xs text-[var(--color-muted)]">
+                      <span>Энэ тэмдэгтийг сонгоно уу</span>
+                      <button
+                        type="button"
+                        onClick={() => setOpenRegisterPicker(null)}
+                        className="rounded-full border border-white/10 px-2 py-1 text-[10px] text-[var(--color-muted)] transition hover:text-[var(--color-text)]"
+                      >
+                        Хаах
+                      </button>
+                    </div>
+                    <div className="grid max-h-72 grid-cols-6 gap-2 overflow-y-auto sm:grid-cols-8">
+                      {mongolianRegisterLetters.map((letter) => (
+                        <button
+                          key={`${activeRegisterPicker}-${letter}`}
+                          type="button"
+                          onClick={() => {
+                            onRegisterPrefixChange(activeRegisterPicker, letter);
+                            setOpenRegisterPicker(null);
+                          }}
+                          className="rounded-xl border-2 border-[rgba(255,255,255,0.14)] bg-[var(--color-panel)] px-2 py-3 text-sm font-semibold transition hover:border-[rgba(201,168,76,0.55)] hover:text-[var(--color-gold)]"
+                        >
+                          {letter}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                ))}
-                <input
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  placeholder="12345678"
-                  value={registerDigits}
-                  onChange={(event) =>
-                    onRegisterDigitsChange(event.target.value)
-                  }
-                  className="rounded-xl border border-white/8 bg-[var(--color-panel)] px-4 py-3 outline-none transition focus:border-[rgba(201,168,76,0.45)] focus:bg-[#22222E]"
-                />
+                ) : null}
               </div>
               <span className="text-[11px] text-[#5A5856]">
                 Эхний 2 тэмдэгтийг Монгол үсгээр сонгоод, арын хэсэгт зөвхөн тоо
@@ -278,7 +292,11 @@ export const PersonalInfoStep = ({
           className="block cursor-pointer rounded-[16px] border border-dashed border-[rgba(201,168,76,0.25)] bg-[var(--color-panel)] px-6 py-10 text-center transition hover:border-[rgba(201,168,76,0.5)] hover:bg-[#22222E]"
         >
           <div className="flex justify-center text-(--color-gold)">
-            {uploadFiles.profilePhoto ? <CheckCircle2 size={32} /> : <Image size={32} />}
+            {uploadFiles.profilePhoto ? (
+              <CheckCircle2 size={32} />
+            ) : (
+              <PhotoIcon size={32} />
+            )}
           </div>
           <div className="mt-3 text-sm font-medium">
             {uploadFiles.profilePhoto
@@ -430,7 +448,7 @@ export const DocumentInfoStep = ({
           <label
             htmlFor={slot.id}
             key={slot.title}
-            className="cursor-pointer rounded-[16px] border border-dashed border-[rgba(201,168,76,0.2)] bg-[var(--color-panel)] px-4 py-8 text-center transition hover:border-[rgba(201,168,76,0.45)] hover:bg-[#22222E]"
+            className="cursor-pointer rounded-[16px] border border-dashed border-[rgba(201,168,76,0.2)] bg-[var(--color-panel)] px-4 py-7 text-center transition hover:border-[rgba(201,168,76,0.45)] hover:bg-[#22222E] sm:py-8"
           >
             <div className="flex justify-center text-(--color-gold)">
               {uploadFiles[slot.id] ? <CheckCircle2 size={28} /> : slot.icon}
@@ -629,7 +647,7 @@ export const CarInfoStep = ({
           <label
             htmlFor={slot.id}
             key={slot.title}
-            className="cursor-pointer rounded-[16px] border border-dashed border-[rgba(201,168,76,0.2)] bg-[var(--color-panel)] px-4 py-8 text-center transition hover:border-[rgba(201,168,76,0.45)] hover:bg-[#22222E]"
+            className="cursor-pointer rounded-[16px] border border-dashed border-[rgba(201,168,76,0.2)] bg-[var(--color-panel)] px-4 py-7 text-center transition hover:border-[rgba(201,168,76,0.45)] hover:bg-[#22222E] sm:py-8"
           >
             <div className="flex justify-center text-(--color-gold)">
               {uploadFiles[slot.id] ? <CheckCircle2 size={28} /> : slot.icon}
