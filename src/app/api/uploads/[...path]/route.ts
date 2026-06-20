@@ -1,7 +1,7 @@
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
-import { driverApplicationUploadRootDir } from "@/lib/driver-application-assets";
+import { driverApplicationUploadRootDir } from "@/lib/driver-application-assets.server";
 
 const mimeTypes: Record<string, string> = {
   ".jpg": "image/jpeg",

@@ -4,9 +4,9 @@ import path from "node:path";
 import { Prisma } from "@/generated/prisma/client";
 import { Resend } from "resend";
 import {
-  driverApplicationUploadRootDir,
   getDriverApplicationUploadUrl,
 } from "@/lib/driver-application-assets";
+import { driverApplicationUploadRootDir } from "@/lib/driver-application-assets.server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 
