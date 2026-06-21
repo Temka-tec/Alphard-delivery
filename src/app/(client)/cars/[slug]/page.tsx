@@ -1,10 +1,19 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Cog, Fuel, Sparkles, Users } from "lucide-react";
 import { getCurrentViewer } from "@/lib/current-viewer";
 import { getCarDetailsBySlug } from "@/lib/car-data";
 import { parseLocationSelection } from "@/lib/mongolia-locations";
 import { CarImageGallery } from "./_components/CarImageGallery";
 import { CarDetailSidebar } from "./_components/CarDetailSidebar";
+
+const featureIcon = (label: string) => {
+  const cls = "text-[var(--color-gold)]";
+  if (label === "Суудал") return <Users size={20} className={cls} />;
+  if (label === "Хурдны хайрцаг") return <Cog size={20} className={cls} />;
+  if (label === "Хөдөлгүүр") return <Fuel size={20} className={cls} />;
+  return <Sparkles size={20} className={cls} />;
+};
 
 export const dynamic = "force-dynamic";
 
@@ -77,7 +86,7 @@ export default async function CarDetailsPage({
                   key={`${car.slug}-${feature.label}`}
                   className="rounded-[18px] border border-white/8 bg-[var(--color-surface)] p-4"
                 >
-                  <div className="text-lg">{feature.icon}</div>
+                  {featureIcon(feature.label)}
                   <div className="mt-3 text-xs text-[var(--color-muted)]">
                     {feature.label}
                   </div>

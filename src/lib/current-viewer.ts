@@ -1,10 +1,11 @@
 import "server-only";
 
+import { cache } from "react";
 import { isAdminEmail } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 
-export const getCurrentViewer = async () => {
+export const getCurrentViewer = cache(async () => {
   const session = await getSession();
 
   if (!session.userId) {
@@ -82,4 +83,4 @@ export const getCurrentViewer = async () => {
     displayName,
     displayEmail: dbUser.email,
   };
-};
+});

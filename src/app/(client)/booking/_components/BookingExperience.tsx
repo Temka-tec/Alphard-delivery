@@ -356,28 +356,28 @@ export const BookingExperience = ({
   return (
     <main className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
       <div className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
-        <header className="flex flex-col gap-4 border-b border-white/8 px-2 py-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
+        <header className="border-b border-white/8 px-4 py-4 sm:px-6">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
             <Link
               href="/"
-              className="rounded-lg border border-white/8 px-4 py-2 text-sm text-[var(--color-muted)] transition hover:text-[var(--color-text)]"
+              className="w-fit rounded-lg border border-white/10 px-3 py-2 text-sm text-[var(--color-muted)] transition hover:text-[var(--color-text)]"
             >
               ← Нүүр хуудас
             </Link>
             <Link
               href="/"
-              className="font-display text-2xl font-extrabold tracking-[-0.04em]"
+              className="font-display text-xl font-extrabold tracking-[-0.04em] text-[var(--color-text)] sm:text-2xl"
             >
               ALPHARD<span className="text-[var(--color-gold)]">.</span>
             </Link>
-          </div>
-          <div className="flex items-center gap-3 self-end sm:self-auto">
-            <ThemeToggle />
-            <span className="text-sm text-[var(--color-muted)]">
-              Сайн байна уу, {displayName}
-            </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.15)] text-sm font-semibold text-[var(--color-gold)]">
-              {displayName.slice(0, 1).toUpperCase()}
+            <div className="flex items-center justify-end gap-3">
+              <ThemeToggle />
+              <span className="hidden text-sm text-[var(--color-muted)] sm:block">
+                Сайн байна уу, {displayName}
+              </span>
+              <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.15)] text-sm font-semibold text-[var(--color-gold)]">
+                {displayName.slice(0, 1).toUpperCase()}
+              </div>
             </div>
           </div>
         </header>
@@ -404,144 +404,99 @@ export const BookingExperience = ({
         </section>
 
         <section className="p-4 sm:p-6">
-          <div className="space-y-4">
-              {filteredCars.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-white/10 bg-[var(--color-panel)] p-8 text-sm text-[var(--color-muted)]">
-                  Энэ шүүлтээр машин олдсонгүй. Шүүлтээ багасгаад дахин оролдоно
-                  уу.
-                </div>
-              ) : null}
+          {filteredCars.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-white/10 bg-[var(--color-panel)] p-8 text-sm text-[var(--color-muted)]">
+              Энэ шүүлтээр машин олдсонгүй. Шүүлтээ багасгаад дахин оролдоно уу.
+            </div>
+          ) : null}
 
-              {filteredCars.map((car) => {
-                const isSelected = selectedCar
-                  ? selectedCar.id === car.id
-                  : car.selected;
+          <div className="grid grid-cols-2 gap-3 xl:grid-cols-3">
+            {filteredCars.map((car) => {
+              const isSelected = selectedCar
+                ? selectedCar.id === car.id
+                : car.selected;
 
-                return (
-                  <article
-                    key={car.id}
-                    className={`grid items-start overflow-hidden rounded-2xl border bg-[var(--color-panel)] transition hover:-translate-y-0.5 hover:border-[rgba(201,168,76,0.25)] xl:grid-cols-[220px_1fr_180px] ${
-                      isSelected
-                        ? "border-[var(--color-gold)] bg-[rgba(201,168,76,0.04)]"
-                        : "border-white/8"
-                    }`}
-                  >
-                    <div className="relative flex min-h-36 items-center justify-center overflow-hidden bg-[linear-gradient(135deg,var(--color-panel),#1E1E2C)] text-6xl sm:min-h-44">
-                      {car.heroImage ? (
-                        <Image
-                          src={car.heroImage}
-                          alt={car.name}
-                          fill
-                          sizes="(max-width: 1280px) 100vw, 220px"
-                          className="object-cover"
-                          unoptimized
-                        />
-                      ) : (
-                        car.icon
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
-                      <div
-                        className={`absolute left-3 top-3 rounded-md border px-2 py-1 text-[10px] ${
-                          car.premium
-                            ? "border-[rgba(180,140,255,0.35)] bg-[rgba(100,60,200,0.2)] text-[#BB99FF]"
-                            : "border-[rgba(45,200,100,0.3)] bg-[rgba(45,106,79,0.25)] text-[#5DE89A]"
-                        }`}
-                      >
-                        {car.badge}
+              return (
+                <article
+                  key={car.id}
+                  className={`card-lift card-glow overflow-hidden rounded-[20px] border bg-[var(--color-surface)] transition hover:border-[rgba(201,168,76,0.25)] ${
+                    isSelected
+                      ? "border-[var(--color-gold)] bg-[rgba(201,168,76,0.04)]"
+                      : "border-[var(--color-text)]/8"
+                  }`}
+                >
+                  {/* Image */}
+                  <div className="relative aspect-[16/10] flex items-center justify-center bg-[linear-gradient(135deg,var(--color-panel),var(--color-surface))]">
+                    {car.heroImage ? (
+                      <Image
+                        src={car.heroImage}
+                        alt={car.name}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                        className="object-cover"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="font-display text-4xl font-extrabold tracking-[0.12em] text-white/80">
+                        {car.icon}
                       </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+                    <div className={`absolute right-3 top-3 rounded-md px-2.5 py-1 text-[10px] tracking-[0.04em] ${car.badgeClassName}`}>
+                      {car.badge}
+                    </div>
+                  </div>
+
+                  {/* Info */}
+                  <div className="p-4 sm:p-5">
+                    <h3 className="font-display text-lg font-bold text-[var(--color-text)]">
+                      {car.name}
+                    </h3>
+                    <p className="mt-1 text-sm text-[var(--color-muted)]">
+                      {car.year} · {car.color} · {car.transmission}
+                    </p>
+
+                    <div className="mt-3 hidden flex-wrap gap-1.5 sm:flex">
+                      {car.tags.map((tag, tagIndex) => (
+                        <span
+                          key={`${tag}-${tagIndex}`}
+                          className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-[var(--color-muted)]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
 
-                    <div className="flex flex-col justify-between p-5">
-                      <div>
-                        <div className="mb-2 flex items-start justify-between gap-3">
-                          <h3 className="font-display text-lg font-bold">
-                            {car.name}
-                          </h3>
-                          <span className="rounded-md border border-white/8 bg-[#22222E] px-2 py-1 text-[11px] text-[var(--color-muted)]">
-                            {car.year}
-                          </span>
-                        </div>
-                        <p className="text-sm text-[var(--color-muted)]">
-                          {car.meta}
-                        </p>
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          {car.features.map((feature) => (
-                            <span
-                              key={feature}
-                              className="rounded-md border border-white/8 bg-white/4 px-2 py-1 text-[11px] text-[var(--color-muted)]"
-                            >
-                              {feature}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="mt-4 flex items-center gap-2">
-                        <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.15)] text-[10px] font-semibold text-[var(--color-gold)]">
-                          {car.driver.initial}
-                        </div>
-                        <div className="text-xs">
-                          <strong className="block text-sm font-medium text-[var(--color-text)]">
-                            {car.driver.name}
-                          </strong>
-                          <span className="text-[var(--color-muted)]">
-                            {car.driver.stats}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col justify-between border-t border-white/8 p-4 xl:border-l xl:border-t-0 xl:p-5">
-                      {/* Mobile: price + buttons in one compact row */}
-                      <div className="flex items-center justify-between gap-3 xl:block">
+                    <div className="mt-5">
+                      <div className="flex items-start justify-between gap-3">
                         <div>
-                          <div className="flex items-center gap-1 text-xs xl:justify-end">
-                            <span className="text-[var(--color-gold)]">★</span>
-                            <span className="font-medium">{car.rating.toFixed(1)}</span>
-                            <span className="text-[var(--color-muted)]">({car.ratingCount})</span>
-                          </div>
-                          <div className="font-display text-xl font-bold text-[var(--color-gold)] xl:text-right xl:text-2xl">
+                          <div className="font-display text-xl font-bold text-[var(--color-gold)]">
                             {formatPrice(car.price)}
+                            <span className="ml-1 font-sans text-xs font-normal text-[var(--color-muted)]">
+                              /
+                            </span>
                           </div>
-                          <p className="text-xs text-[var(--color-muted)] xl:text-right">/ өдөр</p>
+                          <p className="mt-0.5 text-xs text-[var(--color-muted)]">өдөр</p>
                         </div>
-                        {/* Mobile inline buttons */}
-                        <div className="flex flex-col gap-2 xl:hidden">
-                          <button
-                            type="button"
-                            onClick={() => openBooking(car)}
-                            className="rounded-lg bg-[var(--color-gold)] px-4 py-2 text-sm font-medium text-[var(--color-ink)] transition hover:bg-[var(--color-gold-light)]"
-                          >
-                            Захиалах
-                          </button>
-                          <Link
-                            href={`/cars/${car.slug}`}
-                            className="rounded-lg border border-white/8 px-4 py-2 text-center text-sm text-[var(--color-muted)] transition hover:border-[rgba(201,168,76,0.25)] hover:text-[var(--color-text)]"
-                          >
-                            Дэлгэрэнгүй
-                          </Link>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 hidden space-y-2 xl:block">
                         <button
                           type="button"
                           onClick={() => openBooking(car)}
-                          className="w-full rounded-lg bg-[var(--color-gold)] px-4 py-2.5 text-sm font-medium text-[var(--color-ink)] transition hover:bg-[var(--color-gold-light)]"
+                          className="btn-shine hidden rounded-lg bg-[var(--color-gold)] px-4 py-2 text-center text-sm font-medium text-[var(--color-ink)] sm:block"
                         >
                           Захиалах
                         </button>
-                        <Link
-                          href={`/cars/${car.slug}`}
-                          className="block w-full rounded-lg border border-white/8 px-4 py-2 text-center text-sm text-[var(--color-muted)] transition hover:border-[rgba(201,168,76,0.25)] hover:text-[var(--color-text)]"
-                        >
-                          Дэлгэрэнгүй
-                        </Link>
                       </div>
+                      <Link
+                        href={`/cars/${car.slug}`}
+                        className="mt-3 block rounded-lg border border-[rgba(201,168,76,0.4)] px-4 py-2 text-center text-sm font-medium text-[var(--color-gold)] transition hover:bg-[rgba(201,168,76,0.08)]"
+                      >
+                        Дэлгэрэнгүй
+                      </Link>
                     </div>
-                  </article>
-                );
-              })}
+                  </div>
+                </article>
+              );
+            })}
           </div>
 
           <section className="mt-10 rounded-[24px] border border-white/8 bg-[var(--color-surface)] p-5">

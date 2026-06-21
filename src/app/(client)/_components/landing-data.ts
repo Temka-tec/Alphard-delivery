@@ -1,7 +1,7 @@
 export const navItems = [
-  { href: "booking", label: "Машинууд" },
-  { href: "booking", label: "Жолоочид" },
-  { href: "about", label: "Тухай" },
+  { href: "/booking", label: "Машинууд" },
+  { href: "/booking", label: "Жолоочид" },
+  { href: "/about", label: "Тухай" },
 ] as const;
 
 export const stats = [
