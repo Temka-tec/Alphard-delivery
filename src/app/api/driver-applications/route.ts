@@ -1,12 +1,8 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { put } from "@vercel/blob";
 import { Prisma } from "@/generated/prisma/client";
 import { Resend } from "resend";
-import {
-  getDriverApplicationUploadUrl,
-} from "@/lib/driver-application-assets";
-import { driverApplicationUploadRootDir } from "@/lib/driver-application-assets.server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 
@@ -160,12 +156,6 @@ export async function POST(req: Request) {
 
   try {
     const uploadBatchDir = new Date().toISOString().slice(0, 10);
-    const absoluteBatchDir = path.join(
-      driverApplicationUploadRootDir,
-      uploadBatchDir,
-    );
-
-    await mkdir(absoluteBatchDir, { recursive: true });
 
     attachmentEntries = await Promise.all(
       Object.entries(uploadFieldLabels).map(async ([field, label]) => {
@@ -185,20 +175,19 @@ export async function POST(req: Request) {
 
         const fileExtension = getFileExtension(file);
         const baseName = sanitizeFileName(path.basename(file.name, fileExtension));
-        const storedFileName = `${field}-${randomUUID()}-${baseName || "upload"}${fileExtension}`;
-        const relativePath = getDriverApplicationUploadUrl(
-          uploadBatchDir,
-          storedFileName,
-        );
+        const storedFileName = `driver-applications/${uploadBatchDir}/${field}-${randomUUID()}-${baseName || "upload"}${fileExtension}`;
         const fileBuffer = Buffer.from(await file.arrayBuffer());
 
-        await writeFile(path.join(absoluteBatchDir, storedFileName), fileBuffer);
+        const blob = await put(storedFileName, fileBuffer, {
+          access: "public",
+          contentType: file.type,
+        });
 
         return {
           field,
           label,
           originalName: file.name,
-          storedPath: relativePath,
+          storedPath: blob.url,
           size: file.size,
           attachment: {
             filename: file.name,

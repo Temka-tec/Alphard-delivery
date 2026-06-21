@@ -9,7 +9,8 @@ export const isDriverApplicationUploadUrl = (
 ): value is string =>
   Boolean(
     value?.startsWith(driverApplicationUploadUrlPrefix) ||
-      value?.startsWith(legacyDriverApplicationUploadUrlPrefix),
+      value?.startsWith(legacyDriverApplicationUploadUrlPrefix) ||
+      value?.includes("blob.vercel-storage.com"),
   );
 
 export const getDriverApplicationUploadUrl = (
