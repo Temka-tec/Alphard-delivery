@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { CheckCircle2, X } from "lucide-react";
 import type { CarListItem } from "@/lib/car-data";
 import {
   defaultLocationSelection,
@@ -679,7 +680,11 @@ export const BookingExperience = ({
           <div className="w-full max-w-3xl overflow-y-auto rounded-[24px] border border-[rgba(201,168,76,0.25)] bg-[var(--color-surface)] max-h-[95dvh] sm:max-h-[90vh]">
             {success ? (
               <div className="p-8 text-center">
-                <div className="text-5xl">✅</div>
+                <CheckCircle2
+                  size={56}
+                  className="mx-auto text-[#3ECF8E]"
+                  aria-hidden="true"
+                />
                 <h3 className="mt-4 font-display text-2xl font-bold">
                   Захиалга илгээгдлээ!
                 </h3>
@@ -744,7 +749,7 @@ export const BookingExperience = ({
                     onClick={closeBooking}
                     className="flex h-7 w-7 items-center justify-center rounded-md border border-white/8 bg-[var(--color-panel)] text-[var(--color-muted)]"
                   >
-                    ✕
+                    <X size={14} aria-hidden="true" />
                   </button>
                 </div>
 

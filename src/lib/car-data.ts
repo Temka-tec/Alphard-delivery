@@ -43,7 +43,6 @@ export type CarDetailsItem = CarListItem & {
   features: Array<{
     label: string;
     value: string;
-    icon: string;
   }>;
   reviews: Array<{
     initial: string;
@@ -95,19 +94,17 @@ const formatFeatureGrid = (car: {
   features: string[];
 }) => {
   const coreFeatures = [
-    { label: "Суудал", value: `${car.seats} суудал`, icon: "💺" },
-    { label: "Хурдны хайрцаг", value: car.transmission, icon: "⚙️" },
+    { label: "Суудал", value: `${car.seats} суудал` },
+    { label: "Хурдны хайрцаг", value: car.transmission },
     {
       label: "Хөдөлгүүр",
       value: car.enginePower || "Мэдээлэлгүй",
-      icon: "🛢️",
     },
   ];
 
   const extraFeatures = car.features.slice(0, 2).map((feature) => ({
     label: "Нэмэлт",
     value: feature,
-    icon: "✨",
   }));
 
   return [...coreFeatures, ...extraFeatures];

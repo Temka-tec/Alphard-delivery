@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CarFront } from "lucide-react";
 
 import { getCurrentViewer } from "@/lib/current-viewer";
 import { DriverRegistrationDialog } from "./DriverRegistrationDialog";
@@ -18,7 +19,7 @@ export const HeroSection = async () => {
 
       <div className="relative mx-auto max-w-5xl text-center">
         <div className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-[rgba(201,168,76,0.3)] bg-[rgba(201,168,76,0.1)] px-4 py-1.5 text-[11px] tracking-[0.04em] text-[var(--color-gold)] sm:text-xs">
-          <span aria-hidden="true">🚗</span>
+          <CarFront size={14} aria-hidden="true" />
           <span className="truncate">Жолоочтой түрээслэл · 1-7 хоног</span>
         </div>
 

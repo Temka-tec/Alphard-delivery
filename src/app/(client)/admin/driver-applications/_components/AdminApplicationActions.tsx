@@ -46,7 +46,7 @@ export const AdminApplicationActions = ({
 
       toast.success(
         status === "APPROVED"
-          ? "Хүсэлт амжилттай зөвшөөрөгдлөө ✓"
+          ? "Хүсэлт амжилттай зөвшөөрөгдлөө"
           : "Хүсэлт татгалзагдлаа",
       );
 

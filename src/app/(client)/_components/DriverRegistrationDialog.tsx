@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { X } from "lucide-react";
 
 type DriverRegistrationDialogProps = {
   className: string;
@@ -60,7 +61,7 @@ export const DriverRegistrationDialog = ({
                 className="rounded-full border border-white/10 px-3 py-1 text-sm text-[var(--color-muted)] transition hover:text-[var(--color-text)]"
                 aria-label="Хаах"
               >
-                ✕
+                <X size={16} aria-hidden="true" />
               </button>
             </div>
 

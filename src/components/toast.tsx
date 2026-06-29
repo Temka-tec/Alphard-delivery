@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { Check, Sparkles, X } from "lucide-react";
 
 type ToastType = "default" | "success" | "error";
 
@@ -77,10 +78,10 @@ function ToastItem({
     };
   }, [t.id, onDone]);
 
-  const iconMap: Record<ToastType, string> = {
-    default: "✦",
-    success: "✓",
-    error: "✕",
+  const iconMap: Record<ToastType, ReactNode> = {
+    default: <Sparkles size={14} aria-hidden="true" />,
+    success: <Check size={14} aria-hidden="true" />,
+    error: <X size={14} aria-hidden="true" />,
   };
 
   return (

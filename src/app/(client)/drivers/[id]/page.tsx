@@ -69,7 +69,7 @@ export default async function PublicDriverProfilePage({
     <main className="min-h-screen bg-[var(--color-bg)] px-6 py-8 text-[var(--color-text)] sm:px-8 lg:px-10">
       <div className="mx-auto max-w-5xl">
         <Link
-          href="/booking"
+          href="/drivers"
           className="text-sm text-[var(--color-muted)] transition hover:text-[var(--color-gold)]"
         >
           ← Буцах

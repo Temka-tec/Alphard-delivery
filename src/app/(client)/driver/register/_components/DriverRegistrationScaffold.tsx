@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CarFront, Check } from "lucide-react";
 
 import type { StepId } from "./driver-registration-types";
 
@@ -30,18 +31,18 @@ export const DriverRegistrationScaffold = ({
 
       <div className="mb-10 grid grid-cols-4 gap-1 sm:mb-12 sm:gap-3">
         {[
-          { label: "Хэрэглэгч", status: "done", mark: "✓" },
+          { label: "Хэрэглэгч", status: "done", mark: "done" },
           {
             label: "Жолооч",
             status:
               activeStep === 1 ? "active" : activeStep > 1 ? "done" : "idle",
-            mark: activeStep > 1 ? "✓" : "2",
+            mark: activeStep > 1 ? "done" : "2",
           },
           {
             label: "Баримт",
             status:
               activeStep === 2 ? "active" : activeStep > 2 ? "done" : "idle",
-            mark: activeStep > 2 ? "✓" : "3",
+            mark: activeStep > 2 ? "done" : "3",
           },
           {
             label: "Илгээх",
@@ -52,14 +53,14 @@ export const DriverRegistrationScaffold = ({
           <div key={step.label} className="relative flex flex-col items-center">
             {index < 3 ? (
               <div
-              className={`absolute left-1/2 top-[15px] h-px w-full ${
-                step.status === "done"
-                  ? "bg-[var(--color-gold-dark)]"
-                  : "bg-white/8"
-              }`}
-            />
-          ) : null}
-          <div
+                className={`absolute left-1/2 top-[15px] h-px w-full ${
+                  step.status === "done"
+                    ? "bg-[var(--color-gold-dark)]"
+                    : "bg-white/8"
+                }`}
+              />
+            ) : null}
+            <div
               className={`relative z-10 flex h-7 w-7 items-center justify-center rounded-full border text-[10px] font-bold sm:h-9 sm:w-9 sm:text-sm ${
                 step.status === "done"
                   ? "border-[var(--color-gold)] bg-[var(--color-gold)] text-[var(--color-ink)]"
@@ -68,7 +69,7 @@ export const DriverRegistrationScaffold = ({
                     : "border-white/8 bg-[var(--color-surface)] text-[var(--color-muted)]"
               }`}
             >
-              {step.mark}
+              {step.mark === "done" ? <Check size={12} /> : step.mark}
             </div>
             <span
               className={`mt-1.5 text-center text-[9px] leading-tight sm:mt-2 sm:text-[11px] ${
@@ -85,7 +86,7 @@ export const DriverRegistrationScaffold = ({
 
       <div className="mb-8 sm:mb-10">
         <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.08)] px-3 py-1 text-xs text-[var(--color-gold)]">
-          <span>👨‍✈️</span>
+          <CarFront size={14} aria-hidden="true" />
           <span>Алхам {activeStep + 1} / 4</span>
         </div>
         <h1 className="font-display text-3xl font-extrabold tracking-[-0.04em] sm:text-4xl">

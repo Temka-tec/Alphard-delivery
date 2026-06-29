@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { ArrowDownRight, ArrowUpRight, CarFront, Square } from "lucide-react";
 import { isDriverApplicationUploadUrl } from "@/lib/driver-application-assets";
 
 type GalleryImage = {
@@ -142,7 +143,11 @@ export const AdminApplicationGallery = ({
             </div>
           ) : (
             <div className="flex min-h-52 flex-col justify-between gap-6 p-6">
-              <div className="text-6xl leading-none">🚘</div>
+              <CarFront
+                size={56}
+                className="text-[var(--color-gold)]"
+                aria-hidden="true"
+              />
               <div>
                 <div className="text-xs text-[var(--color-gold)]">
                   {coverImage?.label || "Машины үндсэн зураг"}
@@ -168,7 +173,7 @@ export const AdminApplicationGallery = ({
               value:
                 images.find((image) => image.key === "carFrontName")?.value ||
                 null,
-              icon: "↗",
+              icon: <ArrowUpRight size={16} aria-hidden="true" />,
             },
             {
               key: "carBackName",
@@ -176,7 +181,7 @@ export const AdminApplicationGallery = ({
               value:
                 images.find((image) => image.key === "carBackName")?.value ||
                 null,
-              icon: "↘",
+              icon: <ArrowDownRight size={16} aria-hidden="true" />,
             },
             {
               key: "carInteriorName",
@@ -184,7 +189,7 @@ export const AdminApplicationGallery = ({
               value:
                 images.find((image) => image.key === "carInteriorName")
                   ?.value || null,
-              icon: "▣",
+              icon: <Square size={16} aria-hidden="true" />,
             },
           ].map((item) => {
             const canPreview = isStoredImagePath(item.value);

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CarFront } from "lucide-react";
 
 import { getCurrentViewer } from "@/lib/current-viewer";
 import { DriverRegistrationDialog } from "./DriverRegistrationDialog";
@@ -16,7 +17,7 @@ export const DriverCTA = async () => {
     <section id="drivers" className="px-3 py-14 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-6 rounded-[20px] border border-[rgba(201,168,76,0.2)] bg-[linear-gradient(135deg,var(--color-surface),var(--color-panel))] p-5 sm:p-8 lg:flex-row lg:items-center lg:p-10">
-          <div className="text-4xl leading-none sm:text-5xl">👨‍✈️</div>
+          <CarFront className="text-[var(--color-gold)]" size={56} aria-hidden="true" />
 
           <div className="max-w-3xl">
             <h2 className="font-display text-2xl font-bold tracking-[-0.04em] text-foreground sm:text-3xl">
