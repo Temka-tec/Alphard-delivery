@@ -281,6 +281,18 @@
   animation-delay: 0.16s;
 }
 
+.fade-in-up-delay-3 {
+  animation-delay: 0.24s;
+}
+
+.fade-in-up-delay-4 {
+  animation-delay: 0.32s;
+}
+
+.fade-in-up-delay-5 {
+  animation-delay: 0.4s;
+}
+
 @keyframes fade-in-up {
   from {
     opacity: 0;

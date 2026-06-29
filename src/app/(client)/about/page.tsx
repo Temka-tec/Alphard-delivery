@@ -53,11 +53,11 @@ export default function AboutPage() {
 
         <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
           <div>
-            <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.08)] px-4 py-1.5 text-[11px] tracking-[0.08em] text-[var(--color-gold)] sm:text-xs">
+            <div className="fade-in-up inline-flex max-w-full items-center gap-2 rounded-full border border-[rgba(201,168,76,0.25)] bg-[rgba(201,168,76,0.08)] px-4 py-1.5 text-[11px] tracking-[0.08em] text-[var(--color-gold)] motion-reduce:animate-none sm:text-xs">
               <span>ABOUT ALPHARD</span>
             </div>
 
-            <h1 className="mt-6 max-w-4xl font-display text-4xl font-extrabold leading-none tracking-[-0.08em] sm:text-6xl lg:text-7xl">
+            <h1 className="fade-in-up fade-in-up-delay-1 mt-6 max-w-4xl font-display text-4xl font-extrabold leading-none tracking-[-0.08em] motion-reduce:animate-none sm:text-6xl lg:text-7xl">
               Монголд илүү
               <br />
               <span className="text-[var(--color-gold)]">
@@ -67,14 +67,14 @@ export default function AboutPage() {
               аяллын туршлага
             </h1>
 
-            <p className="mt-6 max-w-2xl text-sm leading-7 text-[var(--color-muted)] sm:text-lg sm:leading-8">
+            <p className="fade-in-up fade-in-up-delay-2 mt-6 max-w-2xl text-sm leading-7 text-[var(--color-muted)] motion-reduce:animate-none sm:text-lg sm:leading-8">
               ALPHARD бол жолоочтой машин түрээсийн үйлчилгээг илүү ойлгомжтой,
               цэгцтэй, чанартай болгох зорилготой платформ. Хэн нэгнээс дугаар
               асууж, олон чат дамжихын оронд захиалга, жолоочийн хүсэлт, машины
               мэдээлэл бүгд нэг урсгалд багтана.
             </p>
 
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="fade-in-up fade-in-up-delay-3 mt-10 flex flex-col gap-3 motion-reduce:animate-none sm:flex-row sm:flex-wrap">
               <Link
                 href="/booking"
                 className="rounded-xl bg-[var(--color-gold)] px-6 py-3 text-center text-sm font-medium text-[var(--color-ink)] transition hover:bg-[var(--color-gold-light)]"
@@ -91,7 +91,7 @@ export default function AboutPage() {
           </div>
 
           <div className="grid gap-4">
-            <div className="rounded-[28px] border border-[rgba(201,168,76,0.2)] bg-[linear-gradient(180deg,rgba(201,168,76,0.12),rgba(201,168,76,0.03))] p-6">
+            <div className="fade-in-up fade-in-up-delay-1 rounded-[28px] border border-[rgba(201,168,76,0.2)] bg-[linear-gradient(180deg,rgba(201,168,76,0.12),rgba(201,168,76,0.03))] p-6 motion-reduce:animate-none">
               <div className="text-xs uppercase tracking-[0.14em] text-[var(--color-gold)]">
                 Бидний зорилго
               </div>
@@ -102,10 +102,11 @@ export default function AboutPage() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">
-              {trustPoints.map((point) => (
+              {trustPoints.map((point, index) => (
                 <div
                   key={point.label}
-                  className="rounded-[24px] border border-white/8 bg-[var(--color-surface)] p-5"
+                  className="fade-in-up rounded-[24px] border border-white/8 bg-[var(--color-surface)] p-5 motion-reduce:animate-none"
+                  style={{ animationDelay: `${0.12 * index}s` }}
                 >
                   <div className="font-display text-3xl font-bold text-[var(--color-gold)]">
                     {point.label}
@@ -122,7 +123,7 @@ export default function AboutPage() {
 
       <section className="px-4 py-14 sm:px-6 lg:px-10">
         <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="rounded-[28px] border border-white/8 bg-[var(--color-surface)] p-7">
+          <div className="fade-in-up rounded-[28px] border border-white/8 bg-[var(--color-surface)] p-7 motion-reduce:animate-none">
             <div className="text-xs uppercase tracking-[0.14em] text-[var(--color-gold)]">
               Бид хэрхэн эхэлсэн бэ
             </div>
@@ -147,7 +148,10 @@ export default function AboutPage() {
             {values.map((value) => (
               <article
                 key={value.title}
-                className="rounded-[28px] border border-white/8 bg-[var(--color-surface)] p-6"
+                className="fade-in-up rounded-[28px] border border-white/8 bg-[var(--color-surface)] p-6 motion-reduce:animate-none"
+                style={{
+                  animationDelay: `${0.08 * (Number(value.mark) - 1)}s`,
+                }}
               >
                 <div className="font-display text-sm font-bold text-[var(--color-gold)]">
                   {value.mark}
@@ -161,7 +165,7 @@ export default function AboutPage() {
               </article>
             ))}
 
-            <article className="rounded-[28px] border border-[rgba(201,168,76,0.2)] bg-[linear-gradient(135deg,rgba(201,168,76,0.1),rgba(201,168,76,0.04))] p-6 sm:col-span-2">
+            <article className="fade-in-up fade-in-up-delay-4 rounded-[28px] border border-[rgba(201,168,76,0.2)] bg-[linear-gradient(135deg,rgba(201,168,76,0.1),rgba(201,168,76,0.04))] p-6 motion-reduce:animate-none sm:col-span-2">
               <div className="text-xs uppercase tracking-[0.14em] text-[var(--color-gold)]">
                 Product Direction
               </div>
@@ -194,7 +198,8 @@ export default function AboutPage() {
             {milestones.map((item, index) => (
               <div
                 key={item}
-                className="relative overflow-hidden rounded-[28px] border border-white/8 bg-[var(--color-surface)] p-6"
+                className="fade-in-up relative overflow-hidden rounded-[28px] border border-white/8 bg-[var(--color-surface)] p-6 motion-reduce:animate-none"
+                style={{ animationDelay: `${0.08 * index}s` }}
               >
                 <div className="absolute right-4 top-4 font-display text-5xl font-bold text-white/5">
                   0{index + 1}
@@ -215,7 +220,7 @@ export default function AboutPage() {
 
       <section className="px-4 py-16 sm:px-6 lg:px-10">
         <div className="mx-auto grid max-w-6xl gap-6 rounded-[32px] border border-[rgba(201,168,76,0.2)] bg-[linear-gradient(135deg,var(--color-surface),var(--color-panel))] p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center lg:p-10">
-          <div>
+          <div className="fade-in-up motion-reduce:animate-none">
             <div className="text-xs uppercase tracking-[0.14em] text-[var(--color-gold)]">
               Хамт өсгөе
             </div>
@@ -229,7 +234,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <div className="fade-in-up fade-in-up-delay-2 flex flex-col gap-3 motion-reduce:animate-none sm:flex-row sm:flex-wrap">
             <Link
               href="/booking"
               className="rounded-xl bg-[var(--color-gold)] px-6 py-3 text-center text-sm font-medium text-[var(--color-ink)] transition hover:bg-[var(--color-gold-light)]"
